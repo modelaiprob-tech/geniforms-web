@@ -1,0 +1,35 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const {
+  title       = 'Geniforms — Cuestionarios con IA para docentes',
+  description = 'Convierte cualquier tema o texto en un Google Form listo en segundos. Gratuito, sin instalar nada.',
+  ogImage     = '/images/og-default.png',
+} = Astro.props;
+
+const siteBase   = Astro.site ?? 'https://geniforms.es';
+const canonical  = new URL(Astro.url.pathname, siteBase).href;
+const ogImageAbs = new URL(ogImage, siteBase).href;
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+<!-- Open Graph -->
+<meta property="og:title"       content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image"       content={ogImageAbs} />
+<meta property="og:url"         content={canonical} />
+<meta property="og:type"        content="website" />
+<meta property="og:site_name"   content="Geniforms" />
+
+<!-- Twitter -->
+<meta name="twitter:card"        content="summary_large_image" />
+<meta name="twitter:title"       content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image"       content={ogImageAbs} />

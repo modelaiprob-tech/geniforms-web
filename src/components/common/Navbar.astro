@@ -1,0 +1,297 @@
+---
+import type { User } from '../../lib/auth';
+
+interface Props {
+  user: User | null;
+}
+
+const { user } = Astro.props;
+const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
+---
+
+<header class="navbar">
+  <div class="navbar-inner">
+    <a href="/" class="logo" aria-label="Geniforms">
+      <img src="/images/sidebar-logo.png" alt="" class="logo-img" />
+      <span class="logo-name">GENIFORMS</span>
+    </a>
+
+    <nav class="nav-links" aria-label="Navegación principal"></nav>
+
+    <div class="auth-zone">
+      {user ? (
+        <div class="avatar-menu" id="avatar-menu">
+          <!-- Trigger -->
+          <button class="avatar-btn" id="avatar-btn" aria-haspopup="true" aria-expanded="false" aria-label="Menú de usuario">
+            {user.avatar ? (
+              <>
+                <img
+                  src={user.avatar}
+                  alt={user.name}
+                  class="avatar-img"
+                  onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
+                />
+                <div class="avatar-initial" style="display:none">{initial}</div>
+              </>
+            ) : (
+              <div class="avatar-initial">{initial}</div>
+            )}
+          </button>
+
+          <!-- Dropdown -->
+          <div class="dropdown" id="avatar-dropdown" role="menu">
+            <div class="dropdown-user">
+              <div class="dropdown-user-name">{user.name}</div>
+              <div class="dropdown-user-email">{user.email}</div>
+            </div>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item" id="dd-forms" role="menuitem">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+                <line x1="10" y1="9" x2="8" y2="9"/>
+              </svg>
+              Mis formularios
+            </button>
+            <button class="dropdown-item" id="dd-report" role="menuitem">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="12" y1="8" x2="12" y2="12"/>
+                <line x1="12" y1="16" x2="12.01" y2="16"/>
+              </svg>
+              Reportar problema
+            </button>
+            <div class="dropdown-divider"></div>
+            <button class="dropdown-item dropdown-item--danger" id="dd-signout" role="menuitem">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                <polyline points="16 17 21 12 16 7"/>
+                <line x1="21" y1="12" x2="9" y2="12"/>
+              </svg>
+              Cerrar sesión
+            </button>
+          </div>
+        </div>
+      ) : (
+        <a href="/auth/login" class="btn-signin">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+            <polyline points="10 17 15 12 10 7"/>
+            <line x1="15" y1="12" x2="3" y2="12"/>
+          </svg>
+          Iniciar sesión
+        </a>
+      )}
+    </div>
+  </div>
+</header>
+
+<style>
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(245,245,245,0.9);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .navbar-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    text-decoration: none;
+  }
+  .logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  .logo-name {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--magenta) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .nav-links { flex: 1; display: flex; align-items: center; gap: 4px; }
+  .auth-zone { margin-left: auto; }
+
+  /* Sign-in button */
+  .btn-signin {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .btn-signin:hover { opacity: 0.88; }
+
+  /* Avatar menu */
+  .avatar-menu { position: relative; }
+
+  .avatar-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    transition: border-color 0.15s;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .avatar-btn:hover,
+  .avatar-btn[aria-expanded="true"] { border-color: var(--accent); }
+
+  .avatar-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+  .avatar-initial {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+  }
+
+  /* Dropdown */
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    min-width: 220px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.10);
+    z-index: 200;
+    overflow: hidden;
+    animation: dropIn 0.12s ease;
+  }
+  .dropdown.open { display: block; }
+
+  @keyframes dropIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .dropdown-user {
+    padding: 12px 14px 10px;
+  }
+  .dropdown-user-name  { font-size: 13px; font-weight: 600; color: var(--text); }
+  .dropdown-user-email { font-size: 11px; color: var(--text-2); margin-top: 1px; }
+
+  .dropdown-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 2px 0;
+  }
+
+  .dropdown-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 9px 14px;
+    background: none;
+    border: none;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.1s;
+  }
+  .dropdown-item:hover { background: rgba(91,45,158,0.06); }
+  .dropdown-item svg   { flex-shrink: 0; color: var(--text-2); }
+
+  .dropdown-item--danger       { color: #DC2626; }
+  .dropdown-item--danger svg   { color: #DC2626; }
+  .dropdown-item--danger:hover { background: rgba(220,38,38,0.06); }
+</style>
+
+<script>
+  import { auth } from '../../lib/firebase';
+  import { signOut } from 'firebase/auth';
+
+  const btn      = document.getElementById('avatar-btn');
+  const dropdown = document.getElementById('avatar-dropdown');
+
+  // Toggle dropdown
+  btn?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = dropdown?.classList.toggle('open');
+    btn.setAttribute('aria-expanded', String(open));
+  });
+
+  // Close on outside click
+  document.addEventListener('click', () => {
+    dropdown?.classList.remove('open');
+    btn?.setAttribute('aria-expanded', 'false');
+  });
+
+  function closeDropdown() {
+    dropdown?.classList.remove('open');
+    btn?.setAttribute('aria-expanded', 'false');
+  }
+
+  // Mis formularios
+  document.getElementById('dd-forms')?.addEventListener('click', () => {
+    closeDropdown();
+    document.dispatchEvent(new CustomEvent('gf:open-panel', { detail: { view: 'forms' } }));
+  });
+
+  // Reportar problema
+  document.getElementById('dd-report')?.addEventListener('click', () => {
+    closeDropdown();
+    document.dispatchEvent(new CustomEvent('gf:open-panel', { detail: { view: 'report' } }));
+  });
+
+  // Cerrar sesión
+  document.getElementById('dd-signout')?.addEventListener('click', async () => {
+    await signOut(auth);
+    document.cookie = 'gf_firebase_token=; path=/; max-age=0';
+    localStorage.removeItem('gf_google_token');
+    window.location.href = '/';
+  });
+</script>

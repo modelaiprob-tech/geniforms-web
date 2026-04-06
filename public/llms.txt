@@ -1,0 +1,34 @@
+# Geniforms
+
+## What is Geniforms?
+Geniforms is a free AI-powered quiz generator for teachers and educators. It converts any topic, subject description, or existing quiz text into a fully structured Google Form in seconds, saved directly to the teacher's Google Drive.
+
+## What does it do?
+- Generates quiz questions from scratch given a subject, topic, difficulty level, and optional reference material
+- Formats existing handwritten or copied quizzes into structured Google Forms
+- Supports multiple question types: multiple choice (ABCD), true/false, short answer, and checkbox (multi-select)
+- Uses Google Gemini 2.5 Flash as the AI model for question generation
+- Creates and saves the Google Form directly to the user's Drive via Google Forms API
+- Optionally generates an answer key (solucionario)
+
+## Who is it for?
+Primary audience: Spanish-speaking teachers and educators (K-12, university, tutoring centers) who need to create evaluation material quickly without leaving their Google Workspace.
+
+## How does it work?
+1. Teacher logs in with their Google account
+2. Chooses to generate from scratch or format an existing quiz
+3. Configures question types and counts
+4. Selects a Google Drive folder
+5. Geniforms calls Gemini API → generates JSON question data → creates the Google Form via Forms API → saves to Drive
+6. Teacher receives direct links to the form responder and editor
+
+## Tech stack
+- Frontend: Astro 4 (SSR, Vercel adapter)
+- Auth: Firebase Authentication (Google OAuth)
+- Database: Firestore (user data, form history)
+- AI: Google Gemini 2.5 Flash
+- APIs: Google Forms API, Google Drive API (for folder picker and reference file reading)
+
+## Contact
+hello@geniforms.es
+https://geniforms.es

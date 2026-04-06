@@ -1,0 +1,47 @@
+---
+import Page from '../layouts/Page.astro';
+import Wizard from '../components/home/Wizard.astro';
+import { getUser } from '../lib/auth';
+
+const user = await getUser(Astro.cookies);
+---
+
+<Page
+  title="Geniforms — Genera cuestionarios con IA para tus clases"
+  description="Convierte cualquier tema o texto en un Google Form listo en segundos. Gratuito, sin instalar nada."
+>
+  <section class="hero">
+    <h1 class="hero-title">
+      Genera cuestionarios<br />
+      <span class="hero-title-accent">en segundos con IA</span>
+    </h1>
+  </section>
+
+  <Wizard isLoggedIn={!!user} />
+</Page>
+
+<style>
+  .hero {
+    padding: 40px 24px 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero-title {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .hero-title-accent {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--magenta) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+</style>

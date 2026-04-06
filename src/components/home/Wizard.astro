@@ -1,0 +1,1592 @@
+---
+interface Props {
+  isLoggedIn: boolean;
+}
+const { isLoggedIn } = Astro.props;
+const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
+---
+
+<div class="wiz-wrap">
+  <div class="wiz" id="wizard">
+
+    <!-- ── PROGRESS BAR ── -->
+    <div class="wiz-progress" id="wiz-progress">
+      <div class="wiz-prog-track">
+        <div class="wiz-prog-fill" id="wiz-prog-fill"></div>
+      </div>
+      <div class="wiz-prog-steps">
+        <div class="wiz-prog-step active" data-step="1"><span>1</span></div>
+        <div class="wiz-prog-step" data-step="2"><span>2</span></div>
+        <div class="wiz-prog-step" data-step="3"><span>3</span></div>
+        <div class="wiz-prog-step" data-step="4"><span>4</span></div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ STEP 1 — Modo -->
+    <div class="wiz-step active" id="step-1">
+      <div class="wiz-body">
+        <div class="section-title">&#191;C&oacute;mo quieres crear tu cuestionario?</div>
+
+        <div id="mode-generate" class="mode-card" tabindex="0" role="button" aria-pressed="false">
+          <div class="mode-icon mode-icon--purple">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B2D9E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v1m0 16v1M4.22 4.22l.7.7m12.16 12.16.7.7M3 12h1m16 0h1M4.22 19.78l.7-.7M18.36 5.64l.7-.7"/>
+              <circle cx="12" cy="12" r="4"/>
+            </svg>
+          </div>
+          <div>
+            <div class="mode-title">Generar desde cero</div>
+            <div class="mode-desc">La IA dise&ntilde;a preguntas seg&uacute;n tu materia y objetivo pedag&oacute;gico</div>
+          </div>
+        </div>
+
+        <div id="mode-format" class="mode-card" tabindex="0" role="button" aria-pressed="false">
+          <div class="mode-icon mode-icon--cyan">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00A8C8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          <div>
+            <div class="mode-title">Tengo el cuestionario escrito</div>
+            <div class="mode-desc">Pega tu texto o sube un archivo para convertirlo en formulario</div>
+          </div>
+        </div>
+
+        <div class="tip-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a7 7 0 0 1 7 7c0 4-3 6-3 9H8c0-3-3-5-3-9a7 7 0 0 1 7-7z"/>
+            <line x1="8" y1="22" x2="16" y2="22"/>
+          </svg>
+          <div>
+            <div class="tip-card-title">Consejo pedag&oacute;gico</div>
+            <div class="tip-card-text">Define bien el nivel y la materia para obtener preguntas m&aacute;s precisas y alineadas con tu curr&iacute;culo.</div>
+          </div>
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button id="btn1-next" class="btn-primary" disabled>Siguiente</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ STEP 2A — Generar -->
+    <div class="wiz-step" id="step-2a">
+      <div class="wiz-body">
+        <div class="section-title">Cu&eacute;ntanos sobre tu cuestionario.</div>
+        <div class="card" style="display:flex;flex-direction:column;gap:14px">
+          <div>
+            <label class="field-label" for="inp-title">T&iacute;tulo del formulario *</label>
+            <input type="text" id="inp-title" placeholder="Ej: Examen Tema 3 &mdash; Fotos&iacute;ntesis">
+          </div>
+          <div>
+            <label class="field-label" for="inp-subject">Materia *</label>
+            <input type="text" id="inp-subject" placeholder="Ej: Biolog&iacute;a, Historia, Matem&aacute;ticas...">
+          </div>
+          <div>
+            <label class="field-label" for="inp-context">Contexto adicional</label>
+            <textarea id="inp-context" rows="3" placeholder="Objetivo pedag&oacute;gico, nivel del curso, enfoque espec&iacute;fico..."></textarea>
+          </div>
+          <div>
+            <label class="field-label">Material de referencia</label>
+            <div class="ref-tabs">
+              <button class="ref-tab active" id="ref-tab-paste" type="button">Pegar texto</button>
+              <button class="ref-tab" id="ref-tab-drive" type="button">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:4px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                Desde Drive
+              </button>
+            </div>
+            <div id="ref-panel-paste">
+              <textarea id="inp-ref-text" rows="4" placeholder="Apuntes, temario, fragmento del libro..."></textarea>
+            </div>
+            <div id="ref-panel-drive" class="hidden">
+              <button id="btn-pick-ref-file" class="btn-pick-drive" type="button">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                Seleccionar archivo de Drive
+              </button>
+              <div id="ref-file-selected" class="hidden" style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--accent);padding-top:6px">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                <span id="ref-file-name"></span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="collapsible-hdr" id="intro-hdr">
+              <span class="field-label" style="margin:0">Introducci&oacute;n (opcional)</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="collapsible-body" id="intro-body">
+              <div class="inner">
+                <textarea id="inp-intro" rows="3" placeholder="Texto introductorio para el formulario..."></textarea>
+              </div>
+            </div>
+          </div>
+          <div>
+            <label class="field-label">Dificultad</label>
+            <div class="diff-selector">
+              <button class="diff-opt" data-val="facil">F&aacute;cil</button>
+              <button class="diff-opt active" data-val="medio">Medio</button>
+              <button class="diff-opt" data-val="dificil">Dif&iacute;cil</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button id="btn2a-back" class="btn-secondary">Atr&aacute;s</button>
+        <button id="btn2a-next" class="btn-primary" disabled>Siguiente</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ STEP 2B — Formato -->
+    <div class="wiz-step" id="step-2b">
+      <div class="wiz-body">
+        <div class="section-title">Pega aqu&iacute; tu cuestionario.</div>
+        <div class="card" style="display:flex;flex-direction:column;gap:14px">
+          <div>
+            <label class="field-label" for="inp-title-b">T&iacute;tulo del formulario *</label>
+            <input type="text" id="inp-title-b" placeholder="Ej: Repaso Unidad 2">
+          </div>
+          <div>
+            <label class="field-label" for="inp-paste">Texto del cuestionario</label>
+            <textarea id="inp-paste" rows="8" placeholder="Pega aqu&iacute; las preguntas...&#10;&#10;1. Cu&aacute;l es la capital de Francia?&#10;A) Berl&iacute;n  B) Par&iacute;s  C) Madrid  D) Roma&#10;Respuesta: B"></textarea>
+          </div>
+          <div>
+            <label class="field-label">O sube un archivo</label>
+            <div class="upload-zone" id="upload-zone" tabindex="0" role="button" aria-label="Subir archivo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 16 12 12 8 16"/>
+                <line x1="12" y1="12" x2="12" y2="21"/>
+                <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
+              </svg>
+              <div class="upload-zone-title">Arrastra o haz click para subir</div>
+              <div class="upload-zone-sub">.txt &middot; .pdf &middot; .docx &mdash; max 10 MB</div>
+              <div class="upload-zone-file" id="upload-filename"></div>
+              <input type="file" id="file-input" accept=".txt,.pdf,.docx" style="display:none">
+            </div>
+            <div id="upload-warn" class="warn-card hidden" style="margin-top:8px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+              </svg>
+              <span>Solo archivos .txt en esta versi&oacute;n. Para .pdf y .docx, copia el texto y p&eacute;galo arriba.</span>
+            </div>
+          </div>
+          <div class="tip-card amber">
+            <span style="font-size:16px;line-height:1;flex-shrink:0;margin-top:1px">&#128161;</span>
+            <div class="tip-card-text">Si tienes el solucionario, p&eacute;galo abajo. La IA asignar&aacute; las respuestas correctas con mayor precisi&oacute;n.</div>
+          </div>
+          <div>
+            <div class="collapsible-hdr" id="sol-hdr">
+              <div style="display:flex;align-items:center;gap:8px">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
+                  <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
+                </svg>
+                <span class="field-label" style="margin:0">&iquest;Tienes el solucionario? (opcional)</span>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+            </div>
+            <div class="collapsible-body" id="sol-body">
+              <div class="inner">
+                <textarea id="inp-solucionario" rows="5" placeholder="Pega aqu&iacute; las respuestas correctas o el solucionario. Esto ayuda a la IA a identificar las opciones correctas con precisi&oacute;n."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button id="btn2b-back" class="btn-secondary">Atr&aacute;s</button>
+        <button id="btn2b-next" class="btn-primary" disabled>Siguiente</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ STEP 3 — Tipos -->
+    <div class="wiz-step" id="step-3">
+      <div class="wiz-body">
+        <div class="section-title">Configura tus preguntas.</div>
+        <div class="card">
+          <div class="type-row">
+            <div class="type-checkbox checked" id="chk-mc"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+            <div class="type-name">Opci&oacute;n m&uacute;ltiple (ABCD)</div>
+            <div class="type-count active" id="tc-mc"><input type="number" id="inp-count-mc" value="5" min="0" max="50"></div>
+          </div>
+          <div class="type-row">
+            <div class="type-checkbox checked" id="chk-vf"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+            <div class="type-name">Verdadero / Falso</div>
+            <div class="type-count active" id="tc-vf"><input type="number" id="inp-count-vf" value="5" min="0" max="50"></div>
+          </div>
+          <div class="type-row">
+            <div class="type-checkbox" id="chk-short"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+            <div class="type-name">Respuesta corta</div>
+            <div class="type-count" id="tc-short"><input type="number" id="inp-count-short" value="0" min="0" max="50"></div>
+          </div>
+          <div class="type-row">
+            <div class="type-checkbox" id="chk-cb"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
+            <div class="type-name">Casillas (multi-respuesta)</div>
+            <div class="type-count" id="tc-cb"><input type="number" id="inp-count-cb" value="0" min="0" max="50"></div>
+          </div>
+          <div class="type-total">Total: <strong id="type-total-num">10</strong> preguntas</div>
+        </div>
+
+        <div id="short-warn" class="warn-card hidden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Las preguntas de respuesta corta no pueden corregirse autom&aacute;ticamente en Google Forms.</span>
+        </div>
+
+        <div id="keepasis-card" class="hidden" style="background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.22);border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#007A99" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:1px">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          <div style="font-size:12px;color:#007A99;line-height:1.5">
+            <strong style="display:block;margin-bottom:2px">Tienes texto pegado</strong>
+            <span>Puedes configurar los tipos arriba, o dejar que la IA detecte los tipos y respuestas directamente de tu texto.</span>
+          </div>
+        </div>
+      </div>
+      <div class="wiz-footer wiz-footer--col">
+        <div style="display:flex;gap:10px;width:100%">
+          <button id="btn3-back" class="btn-secondary" style="flex:1">Atr&aacute;s</button>
+          <button id="btn3-next" class="btn-primary" style="flex:2" disabled>Siguiente</button>
+        </div>
+        <button id="btn3-keepasis" class="btn-secondary hidden" style="width:100%">Conservar tal como est&aacute;</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ STEP 4 — Drive -->
+    <div class="wiz-step" id="step-4">
+      <div class="wiz-body">
+        <div class="section-title">&iquest;D&oacute;nde guardamos el formulario?</div>
+
+        <button id="btn-pick-folder" class="btn-pick-drive" type="button">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          Seleccionar carpeta en Drive
+        </button>
+        <div class="folder-selected">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+          <span id="drive-folder-name">Mi Drive (ra&iacute;z)</span>
+        </div>
+
+        <!-- Solucionario toggle -->
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-label">Generar solucionario</div>
+            <div class="toggle-sub">Descarga con explicaciones detalladas</div>
+          </div>
+          <button id="sol-toggle" class="toggle-switch" role="switch" aria-checked="false"></button>
+        </div>
+      </div>
+      <div class="wiz-footer">
+        <button id="btn4-back" class="btn-secondary">Atr&aacute;s</button>
+        <button id="btn4-next" class="btn-primary">Crear formulario</button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ LOADING -->
+    <div class="wiz-step" id="step-loading">
+      <div class="wiz-body wiz-body--center">
+        <div class="loading-spinner">
+          <svg viewBox="0 0 50 50">
+            <circle cx="25" cy="25" r="20" fill="none" stroke="#E5E7EB" stroke-width="4"/>
+            <circle cx="25" cy="25" r="20" fill="none" stroke="url(#spin-grad)" stroke-width="4"
+              stroke-linecap="round" stroke-dasharray="80" stroke-dashoffset="60"/>
+            <defs>
+              <linearGradient id="spin-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#5B2D9E"/>
+                <stop offset="100%" stop-color="#C848FF"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="loading-text" id="loading-text">Generando tu cuestionario...</div>
+        <div class="tip-card loading-tip" id="loading-tip-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 2a7 7 0 0 1 7 7c0 4-3 6-3 9H8c0-3-3-5-3-9a7 7 0 0 1 7-7z"/>
+            <line x1="8" y1="22" x2="16" y2="22"/>
+          </svg>
+          <div class="tip-card-text" id="loading-tip-text">Cuanto m&aacute;s espec&iacute;fico sea el tema, mejor ser&aacute; el resultado.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════════════ SUCCESS -->
+    <div class="wiz-step" id="step-success">
+      <div class="wiz-body">
+        <div class="success-check">
+          <svg viewBox="0 0 36 36" fill="none" stroke="#22C55E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 18 14 26 30 10"/>
+          </svg>
+        </div>
+        <div class="success-title">Formulario creado</div>
+
+        <div class="success-summary">
+          <div class="summary-row">
+            <span class="summary-key">Nombre</span>
+            <span class="summary-val" id="suc-name">&mdash;</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Preguntas</span>
+            <span class="summary-val" id="suc-count">&mdash;</span>
+          </div>
+          <div class="summary-row">
+            <span class="summary-key">Carpeta Drive</span>
+            <span class="summary-val" id="suc-folder">Mi Drive</span>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a id="btn-open-form" href="#" target="_blank" rel="noopener" class="btn-primary" style="text-align:center;text-decoration:none">Abrir formulario</a>
+          <a id="btn-open-drive" href="#" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none">Editar formulario</a>
+          <button id="btn-restart" class="btn-text">Crear otro formulario</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /wiz -->
+</div><!-- /wiz-wrap -->
+
+<!-- Login modal ─────────────────────────────────────────────────────────────
+     PLACEHOLDER: se muestra cuando el usuario intenta crear sin estar logueado.
+────────────────────────────────────────────────────────────────────────────── -->
+<div id="login-modal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+  <div class="modal-card">
+    <button id="modal-close" class="modal-close" aria-label="Cerrar">&times;</button>
+    <div style="width:64px;height:64px;border-radius:16px;background:#EDE8FA;display:flex;align-items:center;justify-content:center;margin:0 auto">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#5B2D9E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </div>
+    <h2 id="modal-title" class="modal-title">Inicia sesi&oacute;n para continuar</h2>
+    <p class="modal-text">Conecta tu cuenta de Google para generar cuestionarios y guardarlos en tu Drive.</p>
+    <!-- PLACEHOLDER: href="/auth/login" → endpoint Supabase OAuth -->
+    <a href="/auth/login" class="btn-google" id="modal-login-btn">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+        <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
+        <path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 009 18z"/>
+        <path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/>
+        <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/>
+      </svg>
+      Continuar con Google
+    </a>
+  </div>
+</div>
+
+<style>
+  /* ── Wizard wrapper ── */
+  .wiz-wrap {
+    padding: 32px 24px 64px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .wiz {
+    width: 100%;
+    max-width: 580px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  /* ── Progress ── */
+  .wiz-progress {
+    position: relative;
+    margin-bottom: 28px;
+  }
+
+  .wiz-prog-track {
+    height: 3px;
+    background: #E5E7EB;
+    border-radius: 2px;
+    margin: 0 20px;
+    position: relative;
+    top: 13px;
+    z-index: 0;
+  }
+
+  .wiz-prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--magenta));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .wiz-prog-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+  }
+
+  .wiz-prog-step {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #E5E7EB;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s, transform 0.2s;
+  }
+
+  .wiz-prog-step span {
+    font-size: 11px;
+    font-weight: 700;
+    color: #9CA3AF;
+    transition: color 0.3s;
+  }
+
+  .wiz-prog-step.active {
+    background: var(--accent);
+    transform: scale(1.1);
+  }
+  .wiz-prog-step.active span { color: #fff; }
+  .wiz-prog-step.done { background: var(--accent); }
+  .wiz-prog-step.done span { color: #fff; }
+
+  /* ── Steps ── */
+  .wiz-step { display: none; flex-direction: column; }
+  .wiz-step.active { display: flex; }
+
+  .wiz-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding-bottom: 20px;
+  }
+
+  .wiz-body--center {
+    align-items: center;
+    padding: 48px 0;
+    text-align: center;
+  }
+
+  .wiz-footer {
+    display: flex;
+    gap: 10px;
+    padding-top: 4px;
+  }
+
+  .wiz-footer--col {
+    flex-direction: column;
+  }
+
+  .wiz-footer .btn-secondary { flex: 1; }
+  .wiz-footer .btn-primary   { flex: 2; }
+
+  /* ── Section title (same as extension) ── */
+  .section-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.25;
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(91,45,158,0.07);
+  }
+
+  /* ── Field label ── */
+  .field-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-2);
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  /* ── Box sizing reset (Astro scopes styles per-component, Base.astro reset doesn't cascade here) ── */
+  .wiz-wrap *,
+  .wiz-wrap *::before,
+  .wiz-wrap *::after,
+  .modal-card *,
+  .modal-card *::before,
+  .modal-card *::after { box-sizing: border-box; }
+
+  /* ── Inputs ── */
+  input[type="text"],
+  input[type="number"],
+  textarea,
+  select {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1.5px solid #E5E7EB;
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--text);
+    background: var(--card);
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type="text"]:focus,
+  textarea:focus { border-color: var(--accent); }
+  input[type="text"]::placeholder,
+  textarea::placeholder { color: #C4C9D4; }
+  textarea { resize: none; line-height: 1.5; }
+
+  input[type="number"] {
+    width: 64px;
+    text-align: center;
+    padding: 8px 6px;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--magenta) 100%);
+    transition: opacity 0.15s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-primary:hover { opacity: 0.92; }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .btn-secondary {
+    width: 100%;
+    padding: 11px 20px;
+    border: 1.5px solid var(--accent);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+    font-family: var(--font);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    background: transparent;
+    transition: background 0.15s;
+  }
+  .btn-secondary:hover { background: rgba(91,45,158,0.06); }
+
+  .btn-text {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 600;
+    padding: 4px 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ── Mode cards (Step 1) ── */
+  .mode-card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(91,45,158,0.07);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .mode-card:hover { border-color: rgba(91,45,158,0.3); }
+  .mode-card.selected {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(91,45,158,0.12);
+  }
+
+  .mode-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .mode-icon--purple { background: rgba(91,45,158,0.1); }
+  .mode-icon--cyan   { background: rgba(0,212,255,0.1); }
+
+  .mode-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .mode-desc {
+    font-size: 12px;
+    color: var(--text-2);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+
+  /* ── Tip card ── */
+  .tip-card {
+    background: linear-gradient(135deg, rgba(91,45,158,0.07) 0%, rgba(200,72,255,0.04) 100%);
+    border: 1px solid rgba(91,45,158,0.14);
+    border-radius: var(--radius-lg);
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .tip-card svg { width: 18px; height: 18px; color: var(--accent); flex-shrink: 0; margin-top: 1px; }
+  .tip-card-text  { font-size: 12px; color: var(--accent); line-height: 1.5; }
+  .tip-card-title { font-weight: 700; font-size: 12px; color: var(--accent); margin-bottom: 2px; }
+  .tip-card.amber { background: #FFF8E1; border-color: #FFD54F; }
+  .tip-card.amber .tip-card-title { color: #E65100; }
+  .tip-card.amber .tip-card-text  { color: #5D4037; }
+
+  /* ── Warn card ── */
+  .warn-card {
+    background: rgba(251,146,60,0.08);
+    border: 1px solid rgba(251,146,60,0.25);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    font-size: 12px;
+    color: #92400E;
+    line-height: 1.5;
+  }
+  .warn-card svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── Collapsible ── */
+  .collapsible-hdr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    padding: 2px 0;
+  }
+  .collapsible-hdr svg { transition: transform 0.2s; color: var(--text-2); flex-shrink: 0; }
+  .collapsible-hdr.open svg { transform: rotate(180deg); }
+  .collapsible-body { overflow: hidden; max-height: 0; transition: max-height 0.22s ease; }
+  .collapsible-body.open { max-height: 300px; }
+  .collapsible-body .inner { padding-top: 8px; }
+
+  /* ── Ref tabs ── */
+  .ref-tabs { display: flex; gap: 4px; margin-bottom: 8px; }
+  .ref-tab {
+    flex: 1;
+    padding: 7px 10px;
+    border-radius: 8px;
+    border: 1.5px solid #E5E7EB;
+    background: none;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .ref-tab.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(91,45,158,0.07);
+  }
+
+  .drive-placeholder {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background: rgba(91,45,158,0.04);
+    border: 1.5px dashed rgba(91,45,158,0.25);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    color: var(--text-2);
+  }
+
+  /* ── Difficulty selector ── */
+  .diff-selector { display: flex; gap: 6px; }
+  .diff-opt {
+    flex: 1;
+    padding: 9px 6px;
+    border: 1.5px solid #E0E0E0;
+    border-radius: 16px;
+    background: #fff;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+  }
+  .diff-opt.active { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 700; }
+  .diff-opt:hover:not(.active) { border-color: var(--accent); color: var(--accent); }
+
+  /* ── Upload zone ── */
+  .upload-zone {
+    border: 2px dashed rgba(91,45,158,0.3);
+    border-radius: var(--radius-md);
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--accent);
+    background: rgba(91,45,158,0.04);
+  }
+  .upload-zone svg { width: 28px; height: 28px; color: var(--accent); margin-bottom: 6px; }
+  .upload-zone-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .upload-zone-sub   { font-size: 11px; color: var(--text-2); }
+  .upload-zone-file  { margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--accent); display: none; }
+
+  /* ── Type rows (Step 3) ── */
+  .type-row {
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    gap: 12px;
+    border-bottom: 1px solid #F3F4F6;
+  }
+  .type-row:last-child { border-bottom: none; }
+
+  .type-checkbox {
+    width: 20px; height: 20px; flex-shrink: 0;
+    border: 2px solid #D1D5DB; border-radius: 5px;
+    cursor: pointer; position: relative;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color 0.15s, background 0.15s;
+    background: #fff;
+  }
+  .type-checkbox.checked { border-color: var(--accent); background: var(--accent); }
+  .type-checkbox svg { display: none; width: 12px; height: 12px; color: #fff; }
+  .type-checkbox.checked svg { display: block; }
+
+  .type-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); }
+
+  .type-count input { opacity: 0.35; pointer-events: none; transition: opacity 0.15s; }
+  .type-count.active input { opacity: 1; pointer-events: auto; }
+
+  .type-total {
+    font-size: 12px;
+    color: var(--text-2);
+    padding-top: 10px;
+    text-align: right;
+  }
+  .type-total strong { color: var(--accent); font-size: 14px; }
+
+  /* ── Drive folder display ── */
+  .folder-selected {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: rgba(91,45,158,0.05);
+    border: 1px solid rgba(91,45,158,0.15);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  /* ── Toggle ── */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 2px 8px rgba(91,45,158,0.07);
+  }
+  .toggle-label { font-size: 13px; font-weight: 600; color: var(--text); }
+  .toggle-sub   { font-size: 11px; color: var(--text-2); margin-top: 1px; }
+  .toggle-switch {
+    width: 44px; height: 24px; border-radius: 12px;
+    background: #E5E7EB; cursor: pointer; position: relative;
+    transition: background 0.2s; flex-shrink: 0;
+    border: none; outline: none;
+  }
+  .toggle-switch::after {
+    content: '';
+    position: absolute; top: 3px; left: 3px;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; transition: left 0.2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .toggle-switch.on { background: var(--accent); }
+  .toggle-switch.on::after { left: 23px; }
+
+  /* ── Loading ── */
+  .loading-spinner {
+    width: 72px;
+    height: 72px;
+    animation: spinSvg 1s linear infinite;
+    margin-bottom: 16px;
+  }
+  @keyframes spinSvg { to { transform: rotate(360deg); } }
+
+  .loading-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+    min-height: 24px;
+    margin-bottom: 16px;
+  }
+
+  .loading-tip { max-width: 400px; }
+
+  /* ── Success ── */
+  .success-check {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(34,197,94,0.1);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto;
+  }
+  .success-check svg {
+    width: 36px; height: 36px;
+    stroke-dasharray: 60; stroke-dashoffset: 60;
+  }
+  .success-check svg.animate { animation: checkDraw 0.55s ease forwards 0.2s; }
+  @keyframes checkDraw { to { stroke-dashoffset: 0; } }
+
+  .success-title {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    text-align: center;
+  }
+
+  .success-summary {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 4px 16px;
+    box-shadow: 0 2px 8px rgba(91,45,158,0.07);
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #F3F4F6;
+    font-size: 13px;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-key { color: var(--text-2); }
+  .summary-val { font-weight: 600; color: var(--text); text-align: right; max-width: 60%; }
+
+  /* ── Login modal ── */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(26,26,46,0.5);
+    backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200; padding: 24px;
+  }
+  .modal-card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    width: 100%; max-width: 380px;
+    position: relative;
+    display: flex; flex-direction: column; align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(91,45,158,0.07);
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 16px;
+    background: none; border: none; font-size: 20px;
+    color: var(--text-2); cursor: pointer; line-height: 1; padding: 4px;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-title { font-size: 18px; font-weight: 700; color: var(--text); text-align: center; }
+  .modal-text  { font-size: 14px; color: var(--text-2); text-align: center; line-height: 1.5; }
+  .btn-google {
+    width: 100%; display: flex; align-items: center; justify-content: center;
+    gap: 10px; padding: 12px;
+    background: var(--card); border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-family: var(--font); font-size: 14px; font-weight: 600; color: var(--text);
+    cursor: pointer; text-decoration: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .btn-google:hover { border-color: var(--accent); box-shadow: 0 2px 8px rgba(91,45,158,0.12); }
+
+  .hidden { display: none !important; }
+
+  /* ── Drive Picker button ── */
+  .btn-pick-drive {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    width: 100%;
+    padding: 10px 16px;
+    background: var(--card);
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: border-color 0.15s, color 0.15s, background 0.15s;
+  }
+  .btn-pick-drive:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(91,45,158,0.04);
+  }
+</style>
+
+<script is:inline src="https://apis.google.com/js/api.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script define:vars={{ isLoggedIn, googleApiKey }}>
+// ── STATE ──────────────────────────────────────────────────────────────────────
+var state = {
+  mode:             null,     // 'generate' | 'format'
+  title:            '',
+  subject:          '',
+  context:          '',
+  intro:            '',
+  difficulty:       'medio',
+  refMaterial:      '',
+  pastedText:       '',
+  uploadedText:     '',
+  solucionarioText: '',
+  solucionario:     false,
+  folderId:         'root',
+  folderName:       'Mi Drive (raiz)',
+  types: {
+    multiple_choice: { on: true,  count: 5 },
+    true_false:      { on: true,  count: 5 },
+    short_answer:    { on: false, count: 0 },
+    checkboxes:      { on: false, count: 0 }
+  },
+  keepAsIs: false,
+  isLoggedIn: isLoggedIn
+};
+
+// ── STEPS / PROGRESS ──────────────────────────────────────────────────────────
+var STEP_ORDER = ['step-1','step-2a','step-2b','step-3','step-4','step-loading','step-success'];
+var STEP_NUM   = { 'step-1': 1, 'step-2a': 2, 'step-2b': 2, 'step-3': 3, 'step-4': 4 };
+var currentStepId = 'step-1';
+
+function showStep(id) {
+  currentStepId = id;
+  STEP_ORDER.forEach(function(s) {
+    var el = document.getElementById(s);
+    if (el) el.classList.toggle('active', s === id);
+  });
+  updateProgress(id);
+}
+
+function updateProgress(id) {
+  var progWrap = document.getElementById('wiz-progress');
+  var fill     = document.getElementById('wiz-prog-fill');
+  var isLoading  = id === 'step-loading';
+  var isSuccess  = id === 'step-success';
+
+  progWrap.style.display = (isLoading || isSuccess) ? 'none' : '';
+
+  var current = STEP_NUM[id] || 0;
+  var dots = document.querySelectorAll('.wiz-prog-step');
+  dots.forEach(function(dot) {
+    var n = parseInt(dot.getAttribute('data-step'), 10);
+    dot.classList.toggle('active', n === current);
+    dot.classList.toggle('done', n < current);
+  });
+
+  var pct = current > 1 ? ((current - 1) / 3) * 100 : 0;
+  if (fill) fill.style.width = pct + '%';
+}
+
+// ── STEP 1 ────────────────────────────────────────────────────────────────────
+(function initStep1() {
+  var modeGen = document.getElementById('mode-generate');
+  var modeFmt = document.getElementById('mode-format');
+  var btnNext = document.getElementById('btn1-next');
+
+  function selectMode(m) {
+    state.mode = m;
+    modeGen.classList.toggle('selected', m === 'generate');
+    modeFmt.classList.toggle('selected', m === 'format');
+    modeGen.setAttribute('aria-pressed', m === 'generate' ? 'true' : 'false');
+    modeFmt.setAttribute('aria-pressed', m === 'format'   ? 'true' : 'false');
+    btnNext.disabled = false;
+  }
+
+  modeGen.addEventListener('click', function() { selectMode('generate'); });
+  modeFmt.addEventListener('click', function() { selectMode('format'); });
+  modeGen.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') selectMode('generate'); });
+  modeFmt.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') selectMode('format'); });
+
+  btnNext.addEventListener('click', function() {
+    if (!state.mode) return;
+    showStep(state.mode === 'generate' ? 'step-2a' : 'step-2b');
+  });
+})();
+
+// ── STEP 2A ───────────────────────────────────────────────────────────────────
+(function initStep2a() {
+  var inpTitle   = document.getElementById('inp-title');
+  var inpSubject = document.getElementById('inp-subject');
+  var btnBack    = document.getElementById('btn2a-back');
+  var btnNext    = document.getElementById('btn2a-next');
+  var introHdr   = document.getElementById('intro-hdr');
+  var introBody  = document.getElementById('intro-body');
+
+  // Difficulty
+  document.querySelectorAll('.diff-opt').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.diff-opt').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      state.difficulty = btn.getAttribute('data-val');
+    });
+  });
+
+  // Reference tabs
+  var tabPaste   = document.getElementById('ref-tab-paste');
+  var tabDrive   = document.getElementById('ref-tab-drive');
+  var panelPaste = document.getElementById('ref-panel-paste');
+  var panelDrive = document.getElementById('ref-panel-drive');
+
+  tabPaste.addEventListener('click', function() {
+    tabPaste.classList.add('active'); tabDrive.classList.remove('active');
+    panelPaste.classList.remove('hidden'); panelDrive.classList.add('hidden');
+  });
+  tabDrive.addEventListener('click', function() {
+    tabDrive.classList.add('active'); tabPaste.classList.remove('active');
+    panelDrive.classList.remove('hidden'); panelPaste.classList.add('hidden');
+  });
+
+  // Collapsible intro
+  introHdr.addEventListener('click', function() {
+    introHdr.classList.toggle('open');
+    introBody.classList.toggle('open');
+  });
+
+  function validate() {
+    btnNext.disabled = !(inpTitle.value.trim() && inpSubject.value.trim());
+  }
+  inpTitle.addEventListener('input', validate);
+  inpSubject.addEventListener('input', validate);
+
+  btnBack.addEventListener('click', function() { showStep('step-1'); });
+  btnNext.addEventListener('click', function() {
+    state.title   = inpTitle.value.trim();
+    state.subject = inpSubject.value.trim();
+    state.context = document.getElementById('inp-context').value.trim();
+    state.intro   = document.getElementById('inp-intro').value.trim();
+    // Only take the textarea value if the paste tab is active (Drive file sets state.refMaterial directly)
+    if (tabPaste.classList.contains('active')) {
+      state.refMaterial = document.getElementById('inp-ref-text').value.trim();
+    }
+    showStep('step-3');
+  });
+})();
+
+// ── STEP 2B ───────────────────────────────────────────────────────────────────
+(function initStep2b() {
+  var inpTitle  = document.getElementById('inp-title-b');
+  var inpPaste  = document.getElementById('inp-paste');
+  var btnBack   = document.getElementById('btn2b-back');
+  var btnNext   = document.getElementById('btn2b-next');
+  var solHdr    = document.getElementById('sol-hdr');
+  var solBody   = document.getElementById('sol-body');
+  var uploadZone = document.getElementById('upload-zone');
+  var fileInput  = document.getElementById('file-input');
+  var fileNameEl = document.getElementById('upload-filename');
+  var uploadWarn = document.getElementById('upload-warn');
+
+  solHdr.addEventListener('click', function() {
+    solHdr.classList.toggle('open');
+    solBody.classList.toggle('open');
+  });
+
+  function validate() {
+    var hasText = inpPaste.value.trim().length > 0;
+    var hasFile = state.uploadedText.length > 0;
+    btnNext.disabled = !(inpTitle.value.trim() && (hasText || hasFile));
+  }
+  inpTitle.addEventListener('input', validate);
+  inpPaste.addEventListener('input', validate);
+
+  uploadZone.addEventListener('click', function() { fileInput.click(); });
+  uploadZone.addEventListener('keydown', function(e) { if (e.key === 'Enter' || e.key === ' ') fileInput.click(); });
+  uploadZone.addEventListener('dragover', function(e) { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+  uploadZone.addEventListener('dragleave', function() { uploadZone.classList.remove('drag-over'); });
+  uploadZone.addEventListener('drop', function(e) {
+    e.preventDefault(); uploadZone.classList.remove('drag-over');
+    if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+  });
+  fileInput.addEventListener('change', function() {
+    if (fileInput.files.length) handleFile(fileInput.files[0]);
+  });
+
+  function handleFile(file) {
+    var ext = file.name.split('.').pop().toLowerCase();
+    if (ext !== 'txt' && ext !== 'pdf' && ext !== 'docx') {
+      uploadWarn.classList.remove('hidden');
+      return;
+    }
+    uploadWarn.classList.add('hidden');
+
+    function onText(text) {
+      state.uploadedText = text;
+      fileNameEl.textContent = file.name;
+      fileNameEl.style.display = 'block';
+      validate();
+    }
+
+    if (ext === 'txt') {
+      var reader = new FileReader();
+      reader.onload = function(ev) { onText(ev.target.result); };
+      reader.readAsText(file);
+    } else if (ext === 'pdf') {
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        var typedArray = new Uint8Array(ev.target.result);
+        if (typeof pdfjsLib === 'undefined') { uploadWarn.classList.remove('hidden'); return; }
+        pdfjsLib.GlobalWorkerOptions.workerSrc =
+          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        pdfjsLib.getDocument({ data: typedArray }).promise.then(function(pdf) {
+          var pages = [];
+          for (var i = 1; i <= pdf.numPages; i++) pages.push(i);
+          return Promise.all(pages.map(function(n) {
+            return pdf.getPage(n).then(function(page) {
+              return page.getTextContent().then(function(tc) {
+                return tc.items.map(function(item) { return item.str; }).join(' ');
+              });
+            });
+          }));
+        }).then(function(texts) { onText(texts.join('\n')); })
+        .catch(function() { uploadWarn.classList.remove('hidden'); });
+      };
+      reader.readAsArrayBuffer(file);
+    } else if (ext === 'docx') {
+      var reader = new FileReader();
+      reader.onload = function(ev) {
+        if (typeof mammoth === 'undefined') { uploadWarn.classList.remove('hidden'); return; }
+        mammoth.extractRawText({ arrayBuffer: ev.target.result })
+          .then(function(result) { onText(result.value); })
+          .catch(function() { uploadWarn.classList.remove('hidden'); });
+      };
+      reader.readAsArrayBuffer(file);
+    }
+  }
+
+  btnBack.addEventListener('click', function() { showStep('step-1'); });
+  btnNext.addEventListener('click', function() {
+    state.title            = inpTitle.value.trim();
+    state.pastedText       = inpPaste.value.trim();
+    state.solucionarioText = document.getElementById('inp-solucionario').value.trim();
+    showStep('step-3');
+  });
+})();
+
+// ── STEP 3 ────────────────────────────────────────────────────────────────────
+(function initStep3() {
+  var totalNum    = document.getElementById('type-total-num');
+  var shortWarn   = document.getElementById('short-warn');
+  var keepasisCard = document.getElementById('keepasis-card');
+  var btnBack     = document.getElementById('btn3-back');
+  var btnNext     = document.getElementById('btn3-next');
+  var btnKeepasis = document.getElementById('btn3-keepasis');
+
+  var rows = {
+    multiple_choice: { chk: document.getElementById('chk-mc'),    tc: document.getElementById('tc-mc'),    input: document.getElementById('inp-count-mc') },
+    true_false:      { chk: document.getElementById('chk-vf'),    tc: document.getElementById('tc-vf'),    input: document.getElementById('inp-count-vf') },
+    short_answer:    { chk: document.getElementById('chk-short'), tc: document.getElementById('tc-short'), input: document.getElementById('inp-count-short') },
+    checkboxes:      { chk: document.getElementById('chk-cb'),    tc: document.getElementById('tc-cb'),    input: document.getElementById('inp-count-cb') }
+  };
+
+  function recalcTotal() {
+    var total = 0;
+    Object.keys(rows).forEach(function(k) {
+      if (state.types[k].on) total += Math.max(0, parseInt(rows[k].input.value, 10) || 0);
+    });
+    totalNum.textContent = total;
+    btnNext.disabled = total < 1;
+    shortWarn.classList.toggle('hidden', !state.types.short_answer.on);
+  }
+
+  Object.keys(rows).forEach(function(k) {
+    var row = rows[k];
+    row.chk.addEventListener('click', function() {
+      state.types[k].on = !state.types[k].on;
+      row.chk.classList.toggle('checked', state.types[k].on);
+      row.tc.classList.toggle('active', state.types[k].on);
+      if (state.types[k].on && (parseInt(row.input.value, 10) || 0) === 0) row.input.value = 5;
+      recalcTotal();
+    });
+    row.input.addEventListener('input', function() {
+      state.types[k].count = Math.max(0, parseInt(row.input.value, 10) || 0);
+      recalcTotal();
+    });
+  });
+
+  btnBack.addEventListener('click', function() {
+    showStep(state.mode === 'format' ? 'step-2b' : 'step-2a');
+  });
+
+  btnNext.addEventListener('click', function() {
+    Object.keys(rows).forEach(function(k) {
+      state.types[k].count = Math.max(0, parseInt(rows[k].input.value, 10) || 0);
+    });
+    showStep('step-4');
+  });
+
+  btnKeepasis.addEventListener('click', function() {
+    state.keepAsIs = true;
+    showStep('step-4');
+  });
+
+  // Show "keep as is" hint when in format mode and step becomes visible
+  var observer = new MutationObserver(function() {
+    var isFormat = state.mode === 'format';
+    keepasisCard.classList.toggle('hidden', !isFormat);
+    btnKeepasis.classList.toggle('hidden', !isFormat);
+  });
+  observer.observe(document.getElementById('step-3'), { attributes: true, attributeFilter: ['class'] });
+})();
+
+// ── STEP 4 ────────────────────────────────────────────────────────────────────
+(function initStep4() {
+  var btnBack    = document.getElementById('btn4-back');
+  var btnNext    = document.getElementById('btn4-next');
+  var solToggle  = document.getElementById('sol-toggle');
+
+  solToggle.addEventListener('click', function() {
+    state.solucionario = !state.solucionario;
+    solToggle.classList.toggle('on', state.solucionario);
+    solToggle.setAttribute('aria-checked', state.solucionario ? 'true' : 'false');
+  });
+
+  btnBack.addEventListener('click', function() { showStep('step-3'); });
+
+  btnNext.addEventListener('click', function() {
+    // ── AUTH CHECK ────────────────────────────────────────────────────────────
+    // PLACEHOLDER: cuando auth esté activa, state.isLoggedIn vendrá del servidor.
+    // Por ahora mostramos el modal si no está logueado.
+    if (!state.isLoggedIn) {
+      document.getElementById('login-modal').classList.remove('hidden');
+      return;
+    }
+    startGeneration();
+  });
+})();
+
+// ── GOOGLE PICKER API ─────────────────────────────────────────────────────────
+function getDriveToken() {
+  return localStorage.getItem('gf_google_token');
+}
+
+function driveExportDoc(fileId, mimeType) {
+  var token = getDriveToken();
+  if (!token) return Promise.reject(new Error('no_token'));
+
+  var DOCX_MIME = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+  var isGoogleDoc = mimeType === 'application/vnd.google-apps.document';
+  var isDocx      = mimeType === DOCX_MIME;
+
+  if (isGoogleDoc) {
+    // Google Docs → exportar como texto plano
+    var url = 'https://www.googleapis.com/drive/v3/files/' + fileId + '/export?mimeType=text%2Fplain';
+    return fetch(url, { headers: { Authorization: 'Bearer ' + token } })
+      .then(function(r) {
+        if (!r.ok) return Promise.reject(new Error('Drive ' + r.status + ' al exportar el documento'));
+        return r.text();
+      });
+  }
+
+  if (isDocx) {
+    // .docx nativo en Drive → descargar binario y parsear con mammoth
+    var url = 'https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media';
+    return fetch(url, { headers: { Authorization: 'Bearer ' + token } })
+      .then(function(r) {
+        if (!r.ok) return Promise.reject(new Error('Drive ' + r.status + ' al descargar el archivo'));
+        return r.arrayBuffer();
+      })
+      .then(function(buf) {
+        if (typeof mammoth === 'undefined') return Promise.reject(new Error('mammoth no cargado'));
+        return mammoth.extractRawText({ arrayBuffer: buf }).then(function(result) { return result.value; });
+      });
+  }
+
+  // texto plano y cualquier otro formato descargable
+  var url = 'https://www.googleapis.com/drive/v3/files/' + fileId + '?alt=media';
+  return fetch(url, { headers: { Authorization: 'Bearer ' + token } })
+    .then(function(r) {
+      if (!r.ok) return Promise.reject(new Error('Drive ' + r.status + ' al descargar el archivo'));
+      return r.text();
+    });
+}
+
+var _pickerLoaded = false;
+function loadPickerApi() {
+  return new Promise(function(resolve, reject) {
+    if (_pickerLoaded) { resolve(); return; }
+    if (!window.gapi) { reject(new Error('gapi_not_loaded')); return; }
+    gapi.load('picker', {
+      callback: function() { _pickerLoaded = true; resolve(); },
+      onerror:  function() { reject(new Error('picker_load_failed')); }
+    });
+  });
+}
+
+// ── FOLDER PICKER (Step 4) ────────────────────────────────────────────────────
+(function initFolderPicker() {
+  var btnPick      = document.getElementById('btn-pick-folder');
+  var folderNameEl = document.getElementById('drive-folder-name');
+
+  btnPick.addEventListener('click', function() {
+    var token = getDriveToken();
+    if (!token) {
+      document.getElementById('login-modal').classList.remove('hidden');
+      return;
+    }
+    loadPickerApi().then(function() {
+      var view = new google.picker.DocsView(google.picker.ViewId.FOLDERS)
+        .setSelectFolderEnabled(true)
+        .setIncludeFolders(true);
+      new google.picker.PickerBuilder()
+        .addView(view)
+        .setOAuthToken(token)
+        .setDeveloperKey(googleApiKey)
+        .setTitle('Selecciona una carpeta de destino')
+        .setCallback(function(data) {
+          if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
+            var doc = (data[google.picker.Response.DOCUMENTS] || data.docs)[0];
+            state.folderId   = doc[google.picker.Document.ID];
+            state.folderName = doc[google.picker.Document.NAME];
+            folderNameEl.textContent = state.folderName;
+          }
+        })
+        .build()
+        .setVisible(true);
+    }).catch(function() {
+      alert('Error al cargar Google Picker. Comprueba que la API est\u00e9 habilitada.');
+    });
+  });
+})();
+
+// ── FILE PICKER (Step 2A ref) ─────────────────────────────────────────────────
+(function initFilePicker() {
+  var btnPick    = document.getElementById('btn-pick-ref-file');
+  var selectedEl = document.getElementById('ref-file-selected');
+  var fileNameEl = document.getElementById('ref-file-name');
+
+  btnPick.addEventListener('click', function() {
+    var token = getDriveToken();
+    if (!token) {
+      document.getElementById('login-modal').classList.remove('hidden');
+      return;
+    }
+    loadPickerApi().then(function() {
+      var view = new google.picker.DocsView()
+        .setMimeTypes('application/vnd.google-apps.document,text/plain,application/vnd.openxmlformats-officedocument.wordprocessingml.document')
+        .setMode(google.picker.DocsViewMode.LIST)
+        .setIncludeFolders(true);
+      new google.picker.PickerBuilder()
+        .addView(view)
+        .setOAuthToken(token)
+        .setDeveloperKey(googleApiKey)
+        .setTitle('Selecciona un documento de referencia')
+        .setCallback(function(data) {
+          if (data[google.picker.Response.ACTION] === google.picker.Action.PICKED) {
+            var doc = (data[google.picker.Response.DOCUMENTS] || data.docs)[0];
+            btnPick.textContent = 'Cargando...';
+            btnPick.disabled = true;
+            driveExportDoc(doc[google.picker.Document.ID], doc[google.picker.Document.MIME_TYPE])
+              .then(function(text) {
+                state.refMaterial = text;
+                fileNameEl.textContent = doc[google.picker.Document.NAME];
+                selectedEl.classList.remove('hidden');
+                btnPick.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Cambiar archivo';
+                btnPick.disabled = false;
+              })
+              .catch(function(err) {
+                btnPick.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Seleccionar archivo de Drive';
+                btnPick.disabled = false;
+                alert('No se pudo leer el archivo: ' + (err.message || 'error desconocido'));
+              });
+          }
+        })
+        .build()
+        .setVisible(true);
+    }).catch(function() {
+      alert('Error al cargar Google Picker. Comprueba que la API est\u00e9 habilitada.');
+    });
+  });
+})();
+
+// ── GENERATION ────────────────────────────────────────────────────────────────
+var LOADING_TEXTS = [
+  'Generando tu cuestionario...',
+  'Aplicando inteligencia artificial...',
+  'Casi listo...'
+];
+var LOADING_TIPS = [
+  'Cuanto mas especifico sea el tema, mejor sera el resultado.',
+  'Las preguntas de opcion multiple favorecen la evaluacion objetiva.',
+  'El nivel de dificultad afecta la complejidad del vocabulario utilizado.'
+];
+
+function startGeneration() {
+  showStep('step-loading');
+
+  var textEl = document.getElementById('loading-text');
+  var tipEl  = document.getElementById('loading-tip-text');
+  var ti = 0, tt = 0;
+
+  var textTimer = setInterval(function() {
+    tt = (tt + 1) % LOADING_TEXTS.length;
+    textEl.textContent = LOADING_TEXTS[tt];
+  }, 2500);
+
+  var tipTimer = setInterval(function() {
+    ti = (ti + 1) % LOADING_TIPS.length;
+    tipEl.textContent = LOADING_TIPS[ti];
+  }, 3500);
+
+  fetch('/api/generate', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      mode:        state.mode,
+      title:       state.title,
+      subject:     state.subject,
+      context:     state.context,
+      intro:       state.intro,
+      difficulty:  state.difficulty,
+      text:        state.mode === 'format'
+                     ? (state.pastedText || state.uploadedText)
+                     : (state.refMaterial || state.uploadedText || ''),
+      types:       state.types,
+      googleToken: localStorage.getItem('gf_google_token')
+    })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    clearInterval(textTimer);
+    clearInterval(tipTimer);
+    if (data.error) throw new Error(data.error);
+    showSuccess({
+      title:   data.title,
+      count:   data.count,
+      formUrl: data.formUrl,
+      editUrl: data.editUrl
+    });
+  })
+  .catch(function(err) {
+    clearInterval(textTimer);
+    clearInterval(tipTimer);
+    showStep('step-4');
+    alert('Error al generar el formulario: ' + err.message);
+  });
+}
+
+function showSuccess(data) {
+  document.getElementById('suc-name').textContent  = data.title;
+  document.getElementById('suc-count').textContent = data.count + ' preguntas';
+  document.getElementById('suc-folder').textContent = 'Mi Drive';
+  document.getElementById('btn-open-form').href  = data.formUrl || '#';
+  document.getElementById('btn-open-drive').href = data.editUrl || '#';
+
+  var checkSvg = document.querySelector('.success-check svg');
+  if (checkSvg) checkSvg.classList.add('animate');
+
+  showStep('step-success');
+
+  document.dispatchEvent(new CustomEvent('gf:form-created', {
+    detail: { title: data.title, formUrl: data.formUrl || '', editUrl: data.editUrl || '' }
+  }));
+}
+
+// ── RESTART ───────────────────────────────────────────────────────────────────
+document.getElementById('btn-restart').addEventListener('click', function() {
+  state.mode = null;
+  state.title = state.subject = state.context = state.intro = '';
+  state.pastedText = state.uploadedText = state.solucionarioText = '';
+  state.refMaterial = ''; state.keepAsIs = false; state.solucionario = false;
+  state.difficulty = 'medio';
+  state.types = {
+    multiple_choice: { on: true,  count: 5 },
+    true_false:      { on: true,  count: 5 },
+    short_answer:    { on: false, count: 0 },
+    checkboxes:      { on: false, count: 0 }
+  };
+  // Reset UI
+  var modeGen = document.getElementById('mode-generate');
+  var modeFmt = document.getElementById('mode-format');
+  modeGen.classList.remove('selected'); modeFmt.classList.remove('selected');
+  document.getElementById('btn1-next').disabled = true;
+  var checkSvg = document.querySelector('.success-check svg');
+  if (checkSvg) checkSvg.classList.remove('animate');
+  showStep('step-1');
+});
+
+// ── LOGIN MODAL ───────────────────────────────────────────────────────────────
+document.getElementById('modal-close').addEventListener('click', function() {
+  document.getElementById('login-modal').classList.add('hidden');
+});
+document.getElementById('login-modal').addEventListener('click', function(e) {
+  if (e.target === document.getElementById('login-modal'))
+    document.getElementById('login-modal').classList.add('hidden');
+});
+
+// ── SESSION RESTORE ───────────────────────────────────────────────────────────
+// Guarda el step antes de ir al login
+document.getElementById('modal-login-btn').addEventListener('click', function() {
+  sessionStorage.setItem('gf_restore_step', currentStepId);
+});
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+(function init() {
+  var restore = sessionStorage.getItem('gf_restore_step');
+  if (restore && isLoggedIn && STEP_ORDER.indexOf(restore) !== -1) {
+    sessionStorage.removeItem('gf_restore_step');
+    showStep(restore);
+  } else {
+    showStep('step-1');
+  }
+})();
+</script>
+
+<script>
+  // Guarda el formulario generado en Firestore cuando el usuario está autenticado
+  import { auth } from '../../lib/firebase';
+  import { db } from '../../lib/firebase';
+  import { collection, addDoc } from 'firebase/firestore';
+
+  document.addEventListener('gf:form-created', async (e: Event) => {
+    const user = auth.currentUser;
+    if (!user) return;
+    const { title, formUrl, editUrl } = (e as CustomEvent<{ title: string; formUrl: string; editUrl: string }>).detail;
+    try {
+      await addDoc(collection(db, 'forms'), {
+        userId:    user.uid,
+        title,
+        formUrl,
+        editUrl,
+        createdAt: new Date().toISOString(),
+      });
+      document.dispatchEvent(new CustomEvent('gf:history-updated'));
+    } catch (err) {
+      console.error('Error al guardar historial de formulario:', err);
+    }
+  });
+</script>

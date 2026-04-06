@@ -1,0 +1,20 @@
+{
+  "name": "geniforms-web",
+  "type": "module",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "astro": "^4.0.0",
+    "@astrojs/vercel": "^7.0.0",
+    "firebase": "^11.0.0",
+    "firebase-admin": "^12.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

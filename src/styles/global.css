@@ -1,0 +1,13 @@
+@import './tokens.css';
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Aquí irán estilos base globales (tipografía, links, etc.) */

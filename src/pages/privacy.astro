@@ -1,0 +1,401 @@
+---
+import Page from '../layouts/Page.astro';
+
+const effectiveDate = new Date('2025-01-01').toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+const year = new Date().getFullYear();
+---
+
+<Page
+  title="Política de Privacidad — Geniforms"
+  description="Política de privacidad de Geniforms. Información sobre qué datos recogemos, cómo los usamos y tus derechos."
+>
+  <div class="priv-wrap">
+
+    <!-- Header -->
+    <div class="priv-header">
+      <h1 class="priv-title">Pol&iacute;tica de Privacidad</h1>
+      <p class="priv-meta">Fecha de entrada en vigor: <strong>{effectiveDate}</strong></p>
+    </div>
+
+    <!-- TOC -->
+    <div class="toc-card card">
+      <div class="toc-label">Contenido</div>
+      <ol class="toc-list">
+        <li><a href="#s1">Qui&eacute;nes somos</a></li>
+        <li><a href="#s2">Qu&eacute; datos recogemos</a></li>
+        <li><a href="#s3">Permisos OAuth de Google</a></li>
+        <li><a href="#s4">C&oacute;mo usamos tus datos</a></li>
+        <li><a href="#s5">Almacenamiento</a></li>
+        <li><a href="#s6">Terceros</a></li>
+        <li><a href="#s7">Tus derechos (RGPD)</a></li>
+        <li><a href="#s8">Menores</a></li>
+        <li><a href="#s9">Cambios</a></li>
+        <li><a href="#s10">Contacto</a></li>
+      </ol>
+    </div>
+
+    <!-- Sections -->
+    <div class="priv-content">
+
+      <section class="priv-section" id="s1">
+        <div class="section-num">01</div>
+        <h2>Qui&eacute;nes somos</h2>
+        <p>Geniforms es una herramienta web y extensi&oacute;n de Chrome desarrollada y operada de forma independiente desde Espa&ntilde;a. Puedes contactarnos en <a href="mailto:hello@geniforms.es">hello@geniforms.es</a>.</p>
+        <p>Esta Pol&iacute;tica de Privacidad explica qu&eacute; informaci&oacute;n recopila Geniforms, c&oacute;mo se utiliza y qu&eacute; opciones tienes al respecto.</p>
+      </section>
+
+      <section class="priv-section" id="s2">
+        <div class="section-num">02</div>
+        <h2>Qu&eacute; datos recogemos</h2>
+        <div class="highlight">
+          <p>Geniforms <strong>no</strong> recopila, almacena ni transmite ning&uacute;n dato personal a servidores externos no autorizados. Todo el procesamiento ocurre localmente o a trav&eacute;s de las APIs oficiales de Google.</p>
+        </div>
+        <p>Concretamente, Geniforms:</p>
+        <ul>
+          <li>No almacena tu nombre, correo electr&oacute;nico ni ning&uacute;n dato identificativo en servidores propios.</li>
+          <li>No registra el contenido de tus prompts ni de los formularios generados.</li>
+          <li>No transmite tokens OAuth a ning&uacute;n servidor que no sean las APIs propias de Google.</li>
+          <li>Guarda tus preferencias (idioma, nombre, carpeta de Drive) localmente en tu dispositivo.</li>
+          <li>Puede guardar un registro de uso local (t&iacute;tulos y fechas) por comodidad.</li>
+        </ul>
+      </section>
+
+      <section class="priv-section" id="s3">
+        <div class="section-num">03</div>
+        <h2>Permisos OAuth de Google</h2>
+        <p>Geniforms solicita los siguientes permisos de Google OAuth. Cada permiso se usa &uacute;nicamente para el fin indicado y para nada m&aacute;s.</p>
+        <div class="scope-grid">
+          <div class="scope-card">
+            <div class="scope-title">drive.file</div>
+            <div class="scope-desc">Acceso solo a los archivos creados o abiertos por Geniforms. Se usa para guardar los formularios generados en tu Drive. Nunca leemos, modificamos ni eliminamos archivos que no hayas creado con Geniforms.</div>
+          </div>
+          <div class="scope-card">
+            <div class="scope-title">forms.body</div>
+            <div class="scope-desc">Crear y actualizar la estructura de Google Forms. Se usa para insertar preguntas, opciones y configuraci&oacute;n en formularios nuevos. No leemos respuestas de formularios existentes.</div>
+          </div>
+          <div class="scope-card">
+            <div class="scope-title">email / profile</div>
+            <div class="scope-desc">Nombre, direcci&oacute;n de correo y foto de perfil de tu cuenta de Google. Se usa para identificarte dentro de la aplicaci&oacute;n y para comunicaciones relacionadas con el servicio.</div>
+          </div>
+        </div>
+        <p>No solicitamos acceso a Gmail, Calendar, Contactos ni a ning&uacute;n otro servicio de Google.</p>
+      </section>
+
+      <section class="priv-section" id="s4">
+        <div class="section-num">04</div>
+        <h2>C&oacute;mo usamos tus datos</h2>
+        <p>Los datos procesados por Geniforms se usan exclusivamente para:</p>
+        <ul>
+          <li>Generar preguntas de cuestionario mediante la API de IA, usando el texto o tema que proporcionas.</li>
+          <li>Crear Google Forms en tu cuenta de Drive a trav&eacute;s de la API de Google Forms.</li>
+          <li>Identificarte y gestionar tu sesi&oacute;n dentro de la aplicaci&oacute;n.</li>
+          <li>Enviarte comunicaciones relacionadas con el servicio (actualizaciones, cambios importantes).</li>
+        </ul>
+        <p>El contenido de tus cuestionarios se env&iacute;a a la API de IA para generar el formulario. Esto est&aacute; sujeto a los t&eacute;rminos de servicio del proveedor de IA correspondiente. Geniforms no conserva ninguna copia de ese contenido.</p>
+      </section>
+
+      <section class="priv-section" id="s5">
+        <div class="section-num">05</div>
+        <h2>Almacenamiento de datos</h2>
+        <p>Los datos de tu cuenta (email, nombre, foto de perfil) se almacenan en nuestra base de datos segura gestionada por <a href="https://supabase.com" target="_blank" rel="noopener">Supabase</a>, ubicada en servidores de la Uni&oacute;n Europea. Estos datos:</p>
+        <ul>
+          <li>Se usan exclusivamente para gestionar tu acceso a Geniforms.</li>
+          <li>Pueden usarse para comunicaciones relacionadas con el servicio.</li>
+          <li>No se venden ni comparten con terceros con fines comerciales.</li>
+          <li>Puedes solicitar su eliminaci&oacute;n en cualquier momento escribiendo a <a href="mailto:hello@geniforms.es">hello@geniforms.es</a>.</li>
+        </ul>
+        <p>Los Google Forms y archivos creados mediante Geniforms se almacenan en tu propia cuenta de Google Drive y est&aacute;n sujetos a las pol&iacute;ticas de datos de Google.</p>
+      </section>
+
+      <section class="priv-section" id="s6">
+        <div class="section-num">06</div>
+        <h2>Terceros</h2>
+        <p>Geniforms interact&uacute;a con los siguientes servicios de terceros:</p>
+        <ul>
+          <li><strong>Google OAuth</strong> &mdash; para autenticaci&oacute;n segura con tu cuenta de Google.</li>
+          <li><strong>API de Google Drive</strong> &mdash; para guardar los formularios generados en tu Drive.</li>
+          <li><strong>API de Google Forms</strong> &mdash; para crear y rellenar formularios.</li>
+          <li><strong>API de IA (Gemini u otro)</strong> &mdash; para generar preguntas a partir de tu input.</li>
+          <li><strong>Supabase</strong> &mdash; para almacenamiento seguro de datos de cuenta y autenticaci&oacute;n.</li>
+        </ul>
+        <p>No compartimos tus datos con ning&uacute;n otro tercero, no los vendemos ni los usamos con fines publicitarios.</p>
+      </section>
+
+      <section class="priv-section" id="s7">
+        <div class="section-num">07</div>
+        <h2>Tus derechos (RGPD)</h2>
+        <p>Si te encuentras en el Espacio Econ&oacute;mico Europeo, tienes los siguientes derechos bajo el Reglamento General de Protecci&oacute;n de Datos (RGPD):</p>
+        <ul>
+          <li><strong>Acceso</strong> &mdash; solicitar una copia de tus datos personales.</li>
+          <li><strong>Rectificaci&oacute;n</strong> &mdash; solicitar la correcci&oacute;n de datos inexactos.</li>
+          <li><strong>Supresi&oacute;n</strong> &mdash; solicitar la eliminaci&oacute;n de tus datos.</li>
+          <li><strong>Portabilidad</strong> &mdash; solicitar tus datos en formato portable.</li>
+          <li><strong>Oposici&oacute;n</strong> &mdash; oponerte a ciertos tipos de tratamiento.</li>
+        </ul>
+        <p>Para ejercer cualquiera de estos derechos, cont&aacute;ctanos en <a href="mailto:hello@geniforms.es">hello@geniforms.es</a> e indicar&eacute; c&oacute;mo proceder.</p>
+      </section>
+
+      <section class="priv-section" id="s8">
+        <div class="section-num">08</div>
+        <h2>Menores</h2>
+        <p>Geniforms est&aacute; dise&ntilde;ado para uso de docentes y adultos. No recopilamos conscientemente ning&uacute;n dato de menores de 13 a&ntilde;os. Si crees que un menor ha usado la extensi&oacute;n de forma que genere preocupaciones sobre su privacidad, cont&aacute;ctanos.</p>
+      </section>
+
+      <section class="priv-section" id="s9">
+        <div class="section-num">09</div>
+        <h2>Cambios en esta pol&iacute;tica</h2>
+        <p>Podemos actualizar esta Pol&iacute;tica de Privacidad ocasionalmente. Cuando lo hagamos, revisaremos la fecha de entrada en vigor en la parte superior de esta p&aacute;gina. Te recomendamos revisarla peri&oacute;dicamente. El uso continuado de Geniforms tras los cambios implica la aceptaci&oacute;n de la pol&iacute;tica actualizada.</p>
+      </section>
+
+      <section class="priv-section" id="s10">
+        <div class="section-num">10</div>
+        <h2>Contacto</h2>
+        <p>Para cualquier consulta o solicitud relacionada con esta Pol&iacute;tica de Privacidad:</p>
+        <div class="contact-box card">
+          <div class="contact-row">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span>Equipo Geniforms</span>
+          </div>
+          <div class="contact-row">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <a href="mailto:hello@geniforms.es">hello@geniforms.es</a>
+          </div>
+          <div class="contact-row">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <a href="https://geniforms.es" target="_blank" rel="noopener">geniforms.es</a>
+          </div>
+        </div>
+      </section>
+
+    </div><!-- /priv-content -->
+
+    <div class="priv-footer">
+      &copy; {year} Geniforms &middot; <a href="mailto:hello@geniforms.es">hello@geniforms.es</a>
+    </div>
+
+  </div><!-- /priv-wrap -->
+</Page>
+
+<style>
+  /* ── Layout ── */
+  .priv-wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ── Header ── */
+  .priv-header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+
+  .priv-title {
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .priv-meta {
+    font-size: 13px;
+    color: var(--text-2);
+  }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(91,45,158,0.07);
+  }
+
+  /* ── TOC ── */
+  .toc-card {
+    margin-bottom: 40px;
+  }
+
+  .toc-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+
+  .toc-list {
+    list-style: none;
+    counter-reset: toc;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px 24px;
+    padding: 0;
+    margin: 0;
+  }
+
+  .toc-list li { counter-increment: toc; }
+
+  .toc-list a {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .toc-list a::before {
+    content: counter(toc, decimal-leading-zero);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .toc-list a:hover { color: var(--accent); }
+
+  /* ── Sections ── */
+  .priv-content { display: flex; flex-direction: column; }
+
+  .priv-section {
+    padding: 40px 0;
+    border-bottom: 1px solid var(--border);
+    scroll-margin-top: 24px;
+  }
+
+  .priv-section:last-child { border-bottom: none; }
+
+  .section-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.7;
+    margin-bottom: 6px;
+  }
+
+  h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  p {
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  p:last-child { margin-bottom: 0; }
+  p a, p a:visited { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 12px 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  li {
+    position: relative;
+    padding-left: 18px;
+    font-size: 14px;
+    color: var(--text-2);
+    line-height: 1.6;
+  }
+
+  li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    opacity: 0.5;
+  }
+
+  li a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+
+  /* ── Highlight ── */
+  .highlight {
+    background: linear-gradient(135deg, rgba(91,45,158,0.07) 0%, rgba(200,72,255,0.04) 100%);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .highlight p { margin: 0; color: var(--accent); font-weight: 500; }
+
+  /* ── Scope grid ── */
+  .scope-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+    gap: 12px;
+    margin: 16px 0;
+  }
+
+  .scope-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+  }
+
+  .scope-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 6px;
+    font-family: monospace;
+  }
+
+  .scope-desc {
+    font-size: 12px;
+    color: var(--text-2);
+    line-height: 1.5;
+  }
+
+  /* ── Contact box ── */
+  .contact-box {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .contact-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+
+  .contact-row a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+  .contact-row svg { flex-shrink: 0; }
+
+  /* ── Footer ── */
+  .priv-footer {
+    margin-top: 48px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-2);
+  }
+  .priv-footer a { color: var(--accent); }
+
+  /* ── Responsive ── */
+  @media (max-width: 560px) {
+    .toc-list { grid-template-columns: 1fr; }
+    .scope-grid { grid-template-columns: 1fr; }
+    .priv-wrap { padding: 32px 16px 64px; }
+  }
+</style>

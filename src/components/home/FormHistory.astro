@@ -1,0 +1,151 @@
+---
+// Carga el historial de formularios del usuario desde Firestore (client-side)
+---
+
+<section id="form-history" class="history-section" style="display:none">
+  <div class="history-header">
+    <h2 class="history-title">Mis formularios</h2>
+  </div>
+  <div id="history-list" class="history-list">
+    <p class="history-loading">Cargando...</p>
+  </div>
+</section>
+
+<script>
+  import { auth } from '../../lib/firebase';
+  import { db } from '../../lib/firebase';
+  import { collection, query, where, getDocs } from 'firebase/firestore';
+  import { onAuthStateChanged } from 'firebase/auth';
+
+  const section = document.getElementById('form-history')!;
+  const list    = document.getElementById('history-list')!;
+
+  function esc(s: string) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  async function loadHistory(userId: string) {
+    try {
+      const snap = await getDocs(
+        query(collection(db, 'forms'), where('userId', '==', userId))
+      );
+
+      if (snap.empty) {
+        list.innerHTML = '<p class="history-empty">Aún no has creado ningún formulario.</p>';
+        return;
+      }
+
+      const docs = [...snap.docs].sort((a, b) =>
+        b.data().createdAt.localeCompare(a.data().createdAt)
+      );
+
+      list.innerHTML = docs.map(doc => {
+        const d = doc.data();
+        const date = new Date(d.createdAt).toLocaleDateString('es-ES', {
+          day: 'numeric', month: 'short', year: 'numeric',
+        });
+        return `
+          <div class="history-card">
+            <div class="history-card-info">
+              <div class="history-card-title">${esc(d.title)}</div>
+              <div class="history-card-date">${date}</div>
+            </div>
+            <div class="history-card-actions">
+              <a href="${esc(d.formUrl)}" target="_blank" rel="noopener" class="hbtn hbtn--primary">Abrir</a>
+              <a href="${esc(d.editUrl)}" target="_blank" rel="noopener" class="hbtn hbtn--secondary">Editar</a>
+            </div>
+          </div>
+        `;
+      }).join('');
+    } catch {
+      list.innerHTML = '<p class="history-empty">Error al cargar el historial.</p>';
+    }
+  }
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      section.style.display = '';
+      loadHistory(user.uid);
+    } else {
+      section.style.display = 'none';
+    }
+  });
+
+  document.addEventListener('gf:history-updated', () => {
+    const user = auth.currentUser;
+    if (user) loadHistory(user.uid);
+  });
+</script>
+
+<style>
+  .history-section {
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 0 24px 48px;
+  }
+
+  .history-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  .history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .history-loading,
+  .history-empty {
+    font-size: 13px;
+    color: var(--text-2);
+    padding: 16px 0;
+  }
+
+  .history-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .history-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 260px;
+  }
+
+  .history-card-date {
+    font-size: 11px;
+    color: var(--text-2);
+    margin-top: 2px;
+  }
+
+  .history-card-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+
+  .hbtn {
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.15s;
+  }
+  .hbtn:hover { opacity: 0.82; }
+  .hbtn--primary   { background: var(--accent); color: #fff; }
+  .hbtn--secondary { background: transparent; border: 1.5px solid var(--accent); color: var(--accent); }
+</style>

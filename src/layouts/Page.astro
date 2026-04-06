@@ -1,0 +1,25 @@
+---
+import Base from './Base.astro';
+import Navbar from '../components/common/Navbar.astro';
+import Footer from '../components/common/Footer.astro';
+import SettingsPanel from '../components/common/SettingsPanel.astro';
+import { getUser } from '../lib/auth';
+
+interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+}
+
+const props = Astro.props;
+const user  = await getUser(Astro.cookies);
+---
+
+<Base {...props}>
+  <Navbar user={user} />
+  <main style="flex:1">
+    <slot />
+  </main>
+  <Footer />
+  <SettingsPanel />
+</Base>

@@ -1,0 +1,71 @@
+<div id="cookie-banner" class="cookie-banner" style="display:none">
+  <div class="cookie-content">
+    <p>
+      Usamos cookies necesarias para que el servicio funcione. 
+      <a href="/cookies">Política de cookies</a>
+    </p>
+    <div class="cookie-actions">
+      <button id="cookie-accept" class="btn-accept">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const banner = document.getElementById('cookie-banner');
+  const acceptBtn = document.getElementById('cookie-accept');
+
+  if (!localStorage.getItem('gf_cookie_consent')) {
+    banner.style.display = 'flex';
+  }
+
+  acceptBtn.addEventListener('click', () => {
+    localStorage.setItem('gf_cookie_consent', '1');
+    banner.style.display = 'none';
+  });
+</script>
+
+<style>
+  .cookie-banner {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1a1a1a;
+    color: #fff;
+    border-radius: 12px;
+    padding: 16px 24px;
+    z-index: 9999;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.2);
+    max-width: 480px;
+    width: calc(100% - 48px);
+  }
+  .cookie-content {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .cookie-content p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    flex: 1;
+  }
+  .cookie-content a {
+    color: #C848FF;
+    text-decoration: underline;
+  }
+  .btn-accept {
+    background: #5B2D9E;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  .btn-accept:hover {
+    background: #4a2080;
+  }
+</style>

@@ -1,0 +1,55 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <span class="copy">&copy; {year} Geniforms</span>
+    <nav class="footer-links">
+      <a href="/privacy">Privacidad</a>
+      <a href="/terms">Términos</a>
+      <a href="/cookies">Cookies</a>
+    </nav>
+    <span class="contact">
+      <a href="mailto:hello@geniforms.es">hello@geniforms.es</a>
+    </span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    background: var(--card);
+    padding: 20px 24px;
+  }
+
+  .footer-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .copy, .contact {
+    font-size: 13px;
+    color: var(--text-2);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .footer-links a, .contact a {
+    font-size: 13px;
+    color: var(--text-2);
+    transition: color 0.15s;
+  }
+
+  .footer-links a:hover, .contact a:hover {
+    color: var(--accent);
+  }
+</style>

@@ -1,0 +1,167 @@
+---
+// Formulario de reporte de incidencias — guarda en Firestore colección "incidencias"
+---
+
+<section class="inc-section">
+  <details class="inc-details">
+    <summary class="inc-summary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      Reportar un problema
+    </summary>
+
+    <div class="inc-body">
+      <textarea
+        id="inc-desc"
+        class="inc-textarea"
+        rows="4"
+        placeholder="Describe el problema que encontraste..."
+        maxlength="2000"
+      ></textarea>
+      <div class="inc-footer">
+        <span id="inc-chars" class="inc-chars">0 / 2000</span>
+        <button id="inc-submit" class="inc-btn" type="button">Enviar reporte</button>
+      </div>
+      <p id="inc-msg" class="inc-msg hidden"></p>
+    </div>
+  </details>
+</section>
+
+<script>
+  import { auth } from '../../lib/firebase';
+  import { db } from '../../lib/firebase';
+  import { collection, addDoc } from 'firebase/firestore';
+
+  const textarea  = document.getElementById('inc-desc')    as HTMLTextAreaElement;
+  const submitBtn = document.getElementById('inc-submit')  as HTMLButtonElement;
+  const msgEl     = document.getElementById('inc-msg')!;
+  const charsEl   = document.getElementById('inc-chars')!;
+
+  textarea.addEventListener('input', () => {
+    charsEl.textContent = `${textarea.value.length} / 2000`;
+  });
+
+  submitBtn.addEventListener('click', async () => {
+    const desc = textarea.value.trim();
+    if (!desc) {
+      showMsg('Escribe una descripción antes de enviar.', 'error');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+    msgEl.classList.add('hidden');
+
+    try {
+      await addDoc(collection(db, 'incidencias'), {
+        userId:      auth.currentUser?.uid ?? null,
+        description: desc,
+        createdAt:   new Date().toISOString(),
+        status:      'open',
+      });
+
+      textarea.value = '';
+      charsEl.textContent = '0 / 2000';
+      showMsg('Reporte enviado. Gracias.', 'ok');
+    } catch {
+      showMsg('Error al enviar. Inténtalo de nuevo.', 'error');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Enviar reporte';
+    }
+  });
+
+  function showMsg(text: string, type: 'ok' | 'error') {
+    msgEl.textContent = text;
+    msgEl.className = `inc-msg inc-msg--${type}`;
+  }
+</script>
+
+<style>
+  .inc-section {
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+  }
+
+  .inc-details {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--card);
+    overflow: hidden;
+  }
+
+  .inc-summary {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-2);
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+  }
+  .inc-summary::-webkit-details-marker { display: none; }
+  .inc-summary:hover { color: var(--text); }
+
+  .inc-body {
+    padding: 0 16px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .inc-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 12px;
+    font-family: var(--font);
+    font-size: 13px;
+    color: var(--text);
+    background: var(--bg);
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s;
+    line-height: 1.5;
+  }
+  .inc-textarea:focus { border-color: var(--accent); }
+  .inc-textarea::placeholder { color: #C4C9D4; }
+
+  .inc-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .inc-chars {
+    font-size: 11px;
+    color: var(--text-2);
+  }
+
+  .inc-btn {
+    padding: 8px 18px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+  .inc-btn:hover    { opacity: 0.88; }
+  .inc-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+
+  .inc-msg { font-size: 12px; line-height: 1.4; }
+  .inc-msg--ok    { color: #16A34A; }
+  .inc-msg--error { color: #DC2626; }
+  .hidden { display: none; }
+</style>
