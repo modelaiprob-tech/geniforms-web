@@ -45,6 +45,18 @@ const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
               <div class="dropdown-user-email">{user.email}</div>
             </div>
             <div class="dropdown-divider"></div>
+            <!-- Language selector -->
+            <div class="dropdown-lang" id="dd-lang">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <button class="lang-btn" data-lang="es" id="lang-es">ES</button>
+              <span class="lang-sep">·</span>
+              <button class="lang-btn" data-lang="en" id="lang-en">EN</button>
+            </div>
+            <div class="dropdown-divider"></div>
             <button class="dropdown-item" id="dd-forms" role="menuitem">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
@@ -53,7 +65,7 @@ const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
                 <line x1="16" y1="17" x2="8" y2="17"/>
                 <line x1="10" y1="9" x2="8" y2="9"/>
               </svg>
-              Mis formularios
+              <span data-i18n="nav.forms">Mis formularios</span>
             </button>
             <button class="dropdown-item" id="dd-report" role="menuitem">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -61,7 +73,7 @@ const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
                 <line x1="12" y1="8" x2="12" y2="12"/>
                 <line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
-              Reportar problema
+              <span data-i18n="nav.report">Reportar problema</span>
             </button>
             <div class="dropdown-divider"></div>
             <button class="dropdown-item dropdown-item--danger" id="dd-signout" role="menuitem">
@@ -70,7 +82,7 @@ const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
                 <polyline points="16 17 21 12 16 7"/>
                 <line x1="21" y1="12" x2="9" y2="12"/>
               </svg>
-              Cerrar sesión
+              <span data-i18n="nav.signout">Cerrar sesión</span>
             </button>
           </div>
         </div>
@@ -81,7 +93,7 @@ const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
             <polyline points="10 17 15 12 10 7"/>
             <line x1="15" y1="12" x2="3" y2="12"/>
           </svg>
-          Iniciar sesión
+          <span data-i18n="nav.signin">Iniciar sesión</span>
         </a>
       )}
     </div>
@@ -248,6 +260,31 @@ const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
   .dropdown-item--danger       { color: #DC2626; }
   .dropdown-item--danger svg   { color: #DC2626; }
   .dropdown-item--danger:hover { background: rgba(220,38,38,0.06); }
+
+  /* Language selector */
+  .dropdown-lang {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    color: var(--text-2);
+  }
+  .lang-sep { font-size: 12px; color: var(--border); }
+  .lang-btn {
+    background: none;
+    border: none;
+    font-family: var(--font);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-2);
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    transition: background 0.1s, color 0.1s;
+    letter-spacing: 0.04em;
+  }
+  .lang-btn:hover { background: rgba(91,45,158,0.08); color: var(--accent); }
+  .lang-btn.active { color: var(--accent); background: rgba(91,45,158,0.1); }
 </style>
 
 <script>
@@ -262,6 +299,8 @@ const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
     e.stopPropagation();
     const open = dropdown?.classList.toggle('open');
     btn.setAttribute('aria-expanded', String(open));
+    // Sync active lang button when opening
+    syncLangButtons();
   });
 
   // Close on outside click
@@ -274,6 +313,29 @@ const initial = user?.name?.charAt(0).toUpperCase() ?? '?';
     dropdown?.classList.remove('open');
     btn?.setAttribute('aria-expanded', 'false');
   }
+
+  // Language selector
+  function syncLangButtons() {
+    const current = (window as any).__lang || 'es';
+    document.querySelectorAll('.lang-btn').forEach((el) => {
+      el.classList.toggle('active', (el as HTMLElement).dataset.lang === current);
+    });
+  }
+
+  document.querySelectorAll('.lang-btn').forEach((el) => {
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const lang = (el as HTMLElement).dataset.lang;
+      if (lang) (window as any).__setLang(lang);
+      syncLangButtons();
+    });
+  });
+
+  // Sync on lang-changed event too
+  document.addEventListener('gf:lang-changed', () => syncLangButtons());
+
+  // Initial sync
+  syncLangButtons();
 
   // Mis formularios
   document.getElementById('dd-forms')?.addEventListener('click', () => {

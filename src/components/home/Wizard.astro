@@ -25,7 +25,7 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
     <!-- ══════════════════════════════════════════════════════ STEP 1 — Modo -->
     <div class="wiz-step active" id="step-1">
       <div class="wiz-body">
-        <div class="section-title">&#191;C&oacute;mo quieres crear tu cuestionario?</div>
+        <div class="section-title" data-i18n="s1.title">&#191;C&oacute;mo quieres crear tu cuestionario?</div>
 
         <div id="mode-generate" class="mode-card" tabindex="0" role="button" aria-pressed="false">
           <div class="mode-icon mode-icon--purple">
@@ -35,8 +35,8 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
             </svg>
           </div>
           <div>
-            <div class="mode-title">Generar desde cero</div>
-            <div class="mode-desc">La IA dise&ntilde;a preguntas seg&uacute;n tu materia y objetivo pedag&oacute;gico</div>
+            <div class="mode-title" data-i18n="mode.gen.title">Generar desde cero</div>
+            <div class="mode-desc" data-i18n="mode.gen.desc">La IA dise&ntilde;a preguntas seg&uacute;n tu materia y objetivo pedag&oacute;gico</div>
           </div>
         </div>
 
@@ -50,8 +50,8 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
             </svg>
           </div>
           <div>
-            <div class="mode-title">Tengo el cuestionario escrito</div>
-            <div class="mode-desc">Pega tu texto o sube un archivo para convertirlo en formulario</div>
+            <div class="mode-title" data-i18n="mode.fmt.title">Tengo el cuestionario escrito</div>
+            <div class="mode-desc" data-i18n="mode.fmt.desc">Pega tu texto o sube un archivo para convertirlo en formulario</div>
           </div>
         </div>
 
@@ -61,40 +61,40 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
             <line x1="8" y1="22" x2="16" y2="22"/>
           </svg>
           <div>
-            <div class="tip-card-title">Consejo pedag&oacute;gico</div>
-            <div class="tip-card-text">Define bien el nivel y la materia para obtener preguntas m&aacute;s precisas y alineadas con tu curr&iacute;culo.</div>
+            <div class="tip-card-title" data-i18n="tip.title">Consejo pedag&oacute;gico</div>
+            <div class="tip-card-text" data-i18n="tip.text">Define bien el nivel y la materia para obtener preguntas m&aacute;s precisas y alineadas con tu curr&iacute;culo.</div>
           </div>
         </div>
       </div>
       <div class="wiz-footer">
-        <button id="btn1-next" class="btn-primary" disabled>Siguiente</button>
+        <button id="btn1-next" class="btn-primary" disabled data-i18n="btn.next">Siguiente</button>
       </div>
     </div>
 
     <!-- ══════════════════════════════════════════════════════ STEP 2A — Generar -->
     <div class="wiz-step" id="step-2a">
       <div class="wiz-body">
-        <div class="section-title">Cu&eacute;ntanos sobre tu cuestionario.</div>
+        <div class="section-title" data-i18n="s2a.title">Cu&eacute;ntanos sobre tu cuestionario.</div>
         <div class="card" style="display:flex;flex-direction:column;gap:14px">
           <div>
-            <label class="field-label" for="inp-title">T&iacute;tulo del formulario *</label>
+            <label class="field-label" for="inp-title" data-i18n="lbl.formtitle">T&iacute;tulo del formulario *</label>
             <input type="text" id="inp-title" placeholder="Ej: Examen Tema 3 &mdash; Fotos&iacute;ntesis">
           </div>
           <div>
-            <label class="field-label" for="inp-subject">Materia *</label>
+            <label class="field-label" for="inp-subject" data-i18n="lbl.subject">Materia *</label>
             <input type="text" id="inp-subject" placeholder="Ej: Biolog&iacute;a, Historia, Matem&aacute;ticas...">
           </div>
           <div>
-            <label class="field-label" for="inp-context">Contexto adicional</label>
+            <label class="field-label" for="inp-context" data-i18n="lbl.context">Contexto adicional</label>
             <textarea id="inp-context" rows="3" placeholder="Objetivo pedag&oacute;gico, nivel del curso, enfoque espec&iacute;fico..."></textarea>
           </div>
           <div>
-            <label class="field-label">Material de referencia</label>
+            <label class="field-label" data-i18n="lbl.refmat">Material de referencia</label>
             <div class="ref-tabs">
-              <button class="ref-tab active" id="ref-tab-paste" type="button">Pegar texto</button>
+              <button class="ref-tab active" id="ref-tab-paste" type="button" data-i18n="tab.paste">Pegar texto</button>
               <button class="ref-tab" id="ref-tab-drive" type="button">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline;vertical-align:-1px;margin-right:4px"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                Desde Drive
+                <span data-i18n="tab.drive">Desde Drive</span>
               </button>
             </div>
             <div id="ref-panel-paste">
@@ -103,7 +103,7 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
             <div id="ref-panel-drive" class="hidden">
               <button id="btn-pick-ref-file" class="btn-pick-drive" type="button">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-                Seleccionar archivo de Drive
+                <span data-i18n="btn.pickfile">Seleccionar archivo de Drive</span>
               </button>
               <div id="ref-file-selected" class="hidden" style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--accent);padding-top:6px">
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -113,7 +113,7 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
           </div>
           <div>
             <div class="collapsible-hdr" id="intro-hdr">
-              <span class="field-label" style="margin:0">Introducci&oacute;n (opcional)</span>
+              <span class="field-label" style="margin:0" data-i18n="lbl.intro">Introducci&oacute;n (opcional)</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <div class="collapsible-body" id="intro-body">
@@ -123,32 +123,32 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
             </div>
           </div>
           <div>
-            <label class="field-label">Dificultad</label>
+            <label class="field-label" data-i18n="lbl.diff">Dificultad</label>
             <div class="diff-selector">
-              <button class="diff-opt" data-val="facil">F&aacute;cil</button>
-              <button class="diff-opt active" data-val="medio">Medio</button>
-              <button class="diff-opt" data-val="dificil">Dif&iacute;cil</button>
+              <button class="diff-opt" data-val="facil" data-i18n="diff.easy">F&aacute;cil</button>
+              <button class="diff-opt active" data-val="medio" data-i18n="diff.med">Medio</button>
+              <button class="diff-opt" data-val="dificil" data-i18n="diff.hard">Dif&iacute;cil</button>
             </div>
           </div>
         </div>
       </div>
       <div class="wiz-footer">
-        <button id="btn2a-back" class="btn-secondary">Atr&aacute;s</button>
-        <button id="btn2a-next" class="btn-primary" disabled>Siguiente</button>
+        <button id="btn2a-back" class="btn-secondary" data-i18n="btn.back">Atr&aacute;s</button>
+        <button id="btn2a-next" class="btn-primary" disabled data-i18n="btn.next">Siguiente</button>
       </div>
     </div>
 
     <!-- ══════════════════════════════════════════════════════ STEP 2B — Formato -->
     <div class="wiz-step" id="step-2b">
       <div class="wiz-body">
-        <div class="section-title">Pega aqu&iacute; tu cuestionario.</div>
+        <div class="section-title" data-i18n="s2b.title">Pega aqu&iacute; tu cuestionario.</div>
         <div class="card" style="display:flex;flex-direction:column;gap:14px">
           <div>
             <label class="field-label" for="inp-title-b">T&iacute;tulo del formulario *</label>
             <input type="text" id="inp-title-b" placeholder="Ej: Repaso Unidad 2">
           </div>
           <div>
-            <label class="field-label" for="inp-paste">Texto del cuestionario</label>
+            <label class="field-label" for="inp-paste" data-i18n="lbl.quiztext">Texto del cuestionario</label>
             <textarea id="inp-paste" rows="8" placeholder="Pega aqu&iacute; las preguntas...&#10;&#10;1. Cu&aacute;l es la capital de Francia?&#10;A) Berl&iacute;n  B) Par&iacute;s  C) Madrid  D) Roma&#10;Respuesta: B"></textarea>
           </div>
           <div>
@@ -159,8 +159,8 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
                 <line x1="12" y1="12" x2="12" y2="21"/>
                 <path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/>
               </svg>
-              <div class="upload-zone-title">Arrastra o haz click para subir</div>
-              <div class="upload-zone-sub">.txt &middot; .pdf &middot; .docx &mdash; max 10 MB</div>
+              <div class="upload-zone-title" data-i18n="upload.title">Arrastra o haz click para subir</div>
+              <div class="upload-zone-sub" data-i18n="upload.sub">.txt &middot; .pdf &middot; .docx &mdash; max 10 MB</div>
               <div class="upload-zone-file" id="upload-filename"></div>
               <input type="file" id="file-input" accept=".txt,.pdf,.docx" style="display:none">
             </div>
@@ -169,12 +169,12 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                 <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
               </svg>
-              <span>Solo archivos .txt en esta versi&oacute;n. Para .pdf y .docx, copia el texto y p&eacute;galo arriba.</span>
+              <span data-i18n="upload.warn">Solo archivos .txt en esta versi&oacute;n. Para .pdf y .docx, copia el texto y p&eacute;galo arriba.</span>
             </div>
           </div>
           <div class="tip-card amber">
             <span style="font-size:16px;line-height:1;flex-shrink:0;margin-top:1px">&#128161;</span>
-            <div class="tip-card-text">Si tienes el solucionario, p&eacute;galo abajo. La IA asignar&aacute; las respuestas correctas con mayor precisi&oacute;n.</div>
+            <div class="tip-card-text" data-i18n="tip.sol.text">Si tienes el solucionario, p&eacute;galo abajo. La IA asignar&aacute; las respuestas correctas con mayor precisi&oacute;n.</div>
           </div>
           <div>
             <div class="collapsible-hdr" id="sol-hdr">
@@ -182,7 +182,7 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0">
                   <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/>
                 </svg>
-                <span class="field-label" style="margin:0">&iquest;Tienes el solucionario? (opcional)</span>
+                <span class="field-label" style="margin:0" data-i18n="lbl.sol">&iquest;Tienes el solucionario? (opcional)</span>
               </div>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
@@ -195,37 +195,37 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
         </div>
       </div>
       <div class="wiz-footer">
-        <button id="btn2b-back" class="btn-secondary">Atr&aacute;s</button>
-        <button id="btn2b-next" class="btn-primary" disabled>Siguiente</button>
+        <button id="btn2b-back" class="btn-secondary" data-i18n="btn.back">Atr&aacute;s</button>
+        <button id="btn2b-next" class="btn-primary" disabled data-i18n="btn.next">Siguiente</button>
       </div>
     </div>
 
     <!-- ══════════════════════════════════════════════════════ STEP 3 — Tipos -->
     <div class="wiz-step" id="step-3">
       <div class="wiz-body">
-        <div class="section-title">Configura tus preguntas.</div>
+        <div class="section-title" data-i18n="s3.title">Configura tus preguntas.</div>
         <div class="card">
           <div class="type-row">
             <div class="type-checkbox checked" id="chk-mc"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
-            <div class="type-name">Opci&oacute;n m&uacute;ltiple (ABCD)</div>
+            <div class="type-name" data-i18n="type.mc">Opci&oacute;n m&uacute;ltiple (ABCD)</div>
             <div class="type-count active" id="tc-mc"><input type="number" id="inp-count-mc" value="5" min="0" max="50"></div>
           </div>
           <div class="type-row">
             <div class="type-checkbox checked" id="chk-vf"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
-            <div class="type-name">Verdadero / Falso</div>
+            <div class="type-name" data-i18n="type.vf">Verdadero / Falso</div>
             <div class="type-count active" id="tc-vf"><input type="number" id="inp-count-vf" value="5" min="0" max="50"></div>
           </div>
           <div class="type-row">
             <div class="type-checkbox" id="chk-short"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
-            <div class="type-name">Respuesta corta</div>
+            <div class="type-name" data-i18n="type.short">Respuesta corta</div>
             <div class="type-count" id="tc-short"><input type="number" id="inp-count-short" value="0" min="0" max="50"></div>
           </div>
           <div class="type-row">
             <div class="type-checkbox" id="chk-cb"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="1.5 6 4.5 9 10.5 3"/></svg></div>
-            <div class="type-name">Casillas (multi-respuesta)</div>
+            <div class="type-name" data-i18n="type.cb">Casillas (multi-respuesta)</div>
             <div class="type-count" id="tc-cb"><input type="number" id="inp-count-cb" value="0" min="0" max="50"></div>
           </div>
-          <div class="type-total">Total: <strong id="type-total-num">10</strong> preguntas</div>
+          <div class="type-total">Total: <strong id="type-total-num">10</strong> <span data-i18n="total.suffix">preguntas</span></div>
         </div>
 
         <div id="short-warn" class="warn-card hidden">
@@ -233,7 +233,7 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
             <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
             <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
           </svg>
-          <span>Las preguntas de respuesta corta no pueden corregirse autom&aacute;ticamente en Google Forms.</span>
+          <span data-i18n="warn.short">Las preguntas de respuesta corta no pueden corregirse autom&aacute;ticamente en Google Forms.</span>
         </div>
 
         <div id="keepasis-card" class="hidden" style="background:rgba(0,212,255,0.06);border:1px solid rgba(0,212,255,0.22);border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start">
@@ -241,46 +241,46 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
             <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
           </svg>
           <div style="font-size:12px;color:#007A99;line-height:1.5">
-            <strong style="display:block;margin-bottom:2px">Tienes texto pegado</strong>
-            <span>Puedes configurar los tipos arriba, o dejar que la IA detecte los tipos y respuestas directamente de tu texto.</span>
+            <strong style="display:block;margin-bottom:2px" data-i18n="keepasis.title">Tienes texto pegado</strong>
+            <span data-i18n="keepasis.text">Puedes configurar los tipos arriba, o dejar que la IA detecte los tipos y respuestas directamente de tu texto.</span>
           </div>
         </div>
       </div>
       <div class="wiz-footer wiz-footer--col">
         <div style="display:flex;gap:10px;width:100%">
-          <button id="btn3-back" class="btn-secondary" style="flex:1">Atr&aacute;s</button>
-          <button id="btn3-next" class="btn-primary" style="flex:2" disabled>Siguiente</button>
+          <button id="btn3-back" class="btn-secondary" style="flex:1" data-i18n="btn.back">Atr&aacute;s</button>
+          <button id="btn3-next" class="btn-primary" style="flex:2" disabled data-i18n="btn.next">Siguiente</button>
         </div>
-        <button id="btn3-keepasis" class="btn-secondary hidden" style="width:100%">Conservar tal como est&aacute;</button>
+        <button id="btn3-keepasis" class="btn-secondary hidden" style="width:100%" data-i18n="btn.keepasis">Conservar tal como est&aacute;</button>
       </div>
     </div>
 
     <!-- ══════════════════════════════════════════════════════ STEP 4 — Drive -->
     <div class="wiz-step" id="step-4">
       <div class="wiz-body">
-        <div class="section-title">&iquest;D&oacute;nde guardamos el formulario?</div>
+        <div class="section-title" data-i18n="s4.title">&iquest;D&oacute;nde guardamos el formulario?</div>
 
         <button id="btn-pick-folder" class="btn-pick-drive" type="button">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-          Seleccionar carpeta en Drive
+          <span data-i18n="btn.pickfolder">Seleccionar carpeta en Drive</span>
         </button>
         <div class="folder-selected">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-          <span id="drive-folder-name">Mi Drive (ra&iacute;z)</span>
+          <span id="drive-folder-name" data-i18n="folder.default">Mi Drive (ra&iacute;z)</span>
         </div>
 
         <!-- Solucionario toggle -->
         <div class="toggle-row">
           <div>
-            <div class="toggle-label">Generar solucionario</div>
-            <div class="toggle-sub">Descarga con explicaciones detalladas</div>
+            <div class="toggle-label" data-i18n="toggle.sol.label">Generar solucionario</div>
+            <div class="toggle-sub" data-i18n="toggle.sol.sub">Descarga con explicaciones detalladas</div>
           </div>
           <button id="sol-toggle" class="toggle-switch" role="switch" aria-checked="false"></button>
         </div>
       </div>
       <div class="wiz-footer">
-        <button id="btn4-back" class="btn-secondary">Atr&aacute;s</button>
-        <button id="btn4-next" class="btn-primary">Crear formulario</button>
+        <button id="btn4-back" class="btn-secondary" data-i18n="btn.back">Atr&aacute;s</button>
+        <button id="btn4-next" class="btn-primary" data-i18n="btn.create">Crear formulario</button>
       </div>
     </div>
 
@@ -319,11 +319,11 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
             <polyline points="6 18 14 26 30 10"/>
           </svg>
         </div>
-        <div class="success-title">Formulario creado</div>
+        <div class="success-title" data-i18n="suc.title">Formulario creado</div>
 
         <div class="success-summary">
           <div class="summary-row">
-            <span class="summary-key">Nombre</span>
+            <span class="summary-key" data-i18n="suc.name">Nombre</span>
             <span class="summary-val" id="suc-name">&mdash;</span>
           </div>
           <div class="summary-row">
@@ -331,15 +331,15 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
             <span class="summary-val" id="suc-count">&mdash;</span>
           </div>
           <div class="summary-row">
-            <span class="summary-key">Carpeta Drive</span>
+            <span class="summary-key" data-i18n="suc.folder.key">Carpeta Drive</span>
             <span class="summary-val" id="suc-folder">Mi Drive</span>
           </div>
         </div>
 
         <div style="display:flex;flex-direction:column;gap:8px">
-          <a id="btn-open-form" href="#" target="_blank" rel="noopener" class="btn-primary" style="text-align:center;text-decoration:none">Abrir formulario</a>
-          <a id="btn-open-drive" href="#" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none">Editar formulario</a>
-          <button id="btn-restart" class="btn-text">Crear otro formulario</button>
+          <a id="btn-open-form" href="#" target="_blank" rel="noopener" class="btn-primary" style="text-align:center;text-decoration:none" data-i18n="btn.openform">Abrir formulario</a>
+          <a id="btn-open-drive" href="#" target="_blank" rel="noopener" class="btn-secondary" style="text-align:center;text-decoration:none" data-i18n="btn.editform">Editar formulario</a>
+          <button id="btn-restart" class="btn-text" data-i18n="btn.restart">Crear otro formulario</button>
         </div>
       </div>
     </div>
@@ -359,9 +359,8 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
         <circle cx="12" cy="7" r="4"/>
       </svg>
     </div>
-    <h2 id="modal-title" class="modal-title">Inicia sesi&oacute;n para continuar</h2>
-    <p class="modal-text">Conecta tu cuenta de Google para generar cuestionarios y guardarlos en tu Drive.</p>
-    <!-- PLACEHOLDER: href="/auth/login" → endpoint Supabase OAuth -->
+    <h2 id="modal-title" class="modal-title" data-i18n="modal.title">Inicia sesi&oacute;n para continuar</h2>
+    <p class="modal-text" data-i18n="modal.text">Conecta tu cuenta de Google para generar cuestionarios y guardarlos en tu Drive.</p>
     <a href="/auth/login" class="btn-google" id="modal-login-btn">
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
         <path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/>
@@ -369,7 +368,7 @@ const googleApiKey = import.meta.env.PUBLIC_GOOGLE_API_KEY ?? '';
         <path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 013.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 000 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/>
         <path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 00.957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/>
       </svg>
-      Continuar con Google
+      <span data-i18n="modal.btn">Continuar con Google</span>
     </a>
   </div>
 </div>
@@ -1378,7 +1377,7 @@ function loadPickerApi() {
         .build()
         .setVisible(true);
     }).catch(function() {
-      alert('Error al cargar Google Picker. Comprueba que la API est\u00e9 habilitada.');
+      alert(window.__t ? window.__t('err.picker') : 'Error al cargar Google Picker.');
     });
   });
 })();
@@ -1421,29 +1420,27 @@ function loadPickerApi() {
               .catch(function(err) {
                 btnPick.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Seleccionar archivo de Drive';
                 btnPick.disabled = false;
-                alert('No se pudo leer el archivo: ' + (err.message || 'error desconocido'));
+                alert((window.__t ? window.__t('err.file') : 'No se pudo leer el archivo') + ': ' + (err.message || 'error desconocido'));
               });
           }
         })
         .build()
         .setVisible(true);
     }).catch(function() {
-      alert('Error al cargar Google Picker. Comprueba que la API est\u00e9 habilitada.');
+      alert(window.__t ? window.__t('err.picker') : 'Error al cargar Google Picker.');
     });
   });
 })();
 
 // ── GENERATION ────────────────────────────────────────────────────────────────
-var LOADING_TEXTS = [
-  'Generando tu cuestionario...',
-  'Aplicando inteligencia artificial...',
-  'Casi listo...'
-];
-var LOADING_TIPS = [
-  'Cuanto mas especifico sea el tema, mejor sera el resultado.',
-  'Las preguntas de opcion multiple favorecen la evaluacion objetiva.',
-  'El nivel de dificultad afecta la complejidad del vocabulario utilizado.'
-];
+function getLoadingTexts() {
+  var t = window.__t || function(k){ return k; };
+  return [t('loading.1'), t('loading.2'), t('loading.3')];
+}
+function getLoadingTips() {
+  var t = window.__t || function(k){ return k; };
+  return [t('loading.tip.1'), t('loading.tip.2'), t('loading.tip.3')];
+}
 
 function startGeneration() {
   showStep('step-loading');
@@ -1451,6 +1448,10 @@ function startGeneration() {
   var textEl = document.getElementById('loading-text');
   var tipEl  = document.getElementById('loading-tip-text');
   var ti = 0, tt = 0;
+  var LOADING_TEXTS = getLoadingTexts();
+  var LOADING_TIPS  = getLoadingTips();
+  if (textEl) textEl.textContent = LOADING_TEXTS[0];
+  if (tipEl)  tipEl.textContent  = LOADING_TIPS[0];
 
   var textTimer = setInterval(function() {
     tt = (tt + 1) % LOADING_TEXTS.length;
@@ -1495,14 +1496,16 @@ function startGeneration() {
     clearInterval(textTimer);
     clearInterval(tipTimer);
     showStep('step-4');
-    alert('Error al generar el formulario: ' + err.message);
+    var msg = window.__t ? window.__t('err.generate') : 'Error al generar el formulario';
+    alert(msg + ': ' + err.message);
   });
 }
 
 function showSuccess(data) {
+  var t = window.__t || function(k){ return k; };
   document.getElementById('suc-name').textContent  = data.title;
-  document.getElementById('suc-count').textContent = data.count + ' preguntas';
-  document.getElementById('suc-folder').textContent = 'Mi Drive';
+  document.getElementById('suc-count').textContent = data.count + ' ' + t('suc.count.suffix');
+  document.getElementById('suc-folder').textContent = state.folderName || t('folder.default');
   document.getElementById('btn-open-form').href  = data.formUrl || '#';
   document.getElementById('btn-open-drive').href = data.editUrl || '#';
 
